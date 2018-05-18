@@ -10,7 +10,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-import static sun.plugin.javascript.navig.JSType.Window;
 
 
 public class Index {
