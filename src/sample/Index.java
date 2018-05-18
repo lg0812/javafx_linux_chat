@@ -3,11 +3,15 @@ package sample;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+
+import static sun.plugin.javascript.navig.JSType.Window;
+
 
 public class Index {
     @FXML
@@ -28,6 +32,8 @@ public class Index {
             stage.setTitle("login");
             stage.setScene(scene);
             stage.show();
+            ((Node) actionEvent.getSource()).getScene().getWindow().hide();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
