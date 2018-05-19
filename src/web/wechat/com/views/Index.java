@@ -1,4 +1,4 @@
-package sample;
+package web.wechat.com.views;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

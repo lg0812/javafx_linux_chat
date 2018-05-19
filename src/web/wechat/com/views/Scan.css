@@ -1,0 +1,12 @@
+.qrCode {
+    -fx-end-margin: auto;
+    -fx-start-margin: auto;
+}
+
+.root {
+    -fx-background-color: #f2f2f2;
+}
+
+#scanLb {
+    -fx-font-size: 18px;
+}
