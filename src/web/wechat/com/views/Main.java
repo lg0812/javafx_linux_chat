@@ -13,7 +13,8 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("scan.fxml"));
         primaryStage.setTitle("Scan to login");
         Scene scene = new Scene(root, 380, 540);
-        scene.getStylesheets().add(Scan.class.getResource("Scan.css").toExternalForm());
+//        Scene scene = new Scene(root, 1000, 720);
+        scene.getStylesheets().add(Scan.class.getResource("main.css").toExternalForm());
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();

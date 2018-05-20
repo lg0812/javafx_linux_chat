@@ -10,3 +10,8 @@
 #scanLb {
     -fx-font-size: 18px;
 }
+
+.avatar {
+    -fx-padding: 10px;
+    -fx-background-color: red;
+}

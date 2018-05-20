@@ -1,35 +1,49 @@
 package web.wechat.com.views;
 
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
+import javafx.stage.Stage;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
 import web.wechat.com.service.ScanService;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class Scan {
+public class Scan implements Initializable {
 
     public static Log log = LogFactory.getLog(Scan.class);
     public ScanService scanService = new ScanService();
 
+    public Map<String, String> map = new HashMap<>();
 
     ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(10);
     @FXML
     public ImageView qrCode;
-
+    @FXML
+    public HBox refreshHbox;
+    @FXML
+    public GridPane root;
     public String qrCodePostfix = "";
 
-    public void initialize() {
-        loadQrCode();
-    }
 
     public void loadQrCode() {
         qrCodePostfix = scanService.jsLogin().toString();
@@ -54,20 +68,42 @@ public class Scan {
 //
 //        }, 1000L);
         scheduledExecutorService.scheduleWithFixedDelay(() -> {
-            Map<String, String> map = scanService.login(qrCodePostfix);
+            map = scanService.login(qrCodePostfix);
+
             if ("201".equals(map.get("window.code"))) {
                 System.out.println(map.get("window.userAvatar").split(",")[1]);
                 qrCode.setImage(new Image(new ByteArrayInputStream(Base64.getDecoder().decode(map.get("window.userAvatar").split(",")[1]))));
-//                    qrCode.setImage(new Image(new ByteArrayInputStream(Base64.getDecoder().decode(map.get("window.userAvatar")))));
-//                scheduledExecutorService.shutdown();
-            } else if ("201".equals(map.get("window.code"))) {
-
+            } else if ("200".equals(map.get("window.code"))) {
+                Platform.runLater(() -> {
+                    try {
+                        Stage stage = new Stage();
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("webwxininit.fxml"));
+                        Scene scene = new Scene((Region) loader.load(), 1000, 720);
+                        stage.setTitle("wechat");
+                        stage.setScene(scene);
+                        Webwxininit webwxininit = loader.<Webwxininit>getController();
+                        webwxininit.initPage(map);
+                        stage.show();
+                        root.getScene().getWindow().hide();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
                 scheduledExecutorService.shutdown();
             } else {
-                log.info(map);
-                System.out.println("not equal");
+                log.info("waiting..." + map);
             }
         }, 1, 1, TimeUnit.SECONDS);
+    }
+
+
+    public void refresh(ActionEvent actionEvent) {
+        loadQrCode();
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        loadQrCode();
     }
 
     @Test
