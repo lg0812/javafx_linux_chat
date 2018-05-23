@@ -32,7 +32,7 @@
                         <RowConstraints minHeight="568.0" vgrow="SOMETIMES"/>
                     </rowConstraints>
                     <children>
-                        <Label text="Label" GridPane.columnIndex="1"/>
+                        <Label fx:id="nickName" text="" GridPane.columnIndex="1"/>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-padding: 10;">
                             <children>
                                 <ImageView fx:id="avatarIV" fitHeight="40" fitWidth="40" pickOnBounds="true"
@@ -50,26 +50,32 @@
                                 </opaqueInsets>
                             </TextField>
                         </HBox>
-                        <HBox alignment="CENTER" prefHeight="40.0" GridPane.rowIndex="2">
+                        <HBox alignment="CENTER" prefHeight="40.0" GridPane.rowIndex="2" onMouseClicked="#toChat">
                             <children>
-                                <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true"/>
+                                <Label text="聊天"/>
+                                <!--  <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true"/>-->
                             </children>
                         </HBox>
-                        <HBox alignment="CENTER" prefHeight="40.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <HBox alignment="CENTER" prefHeight="40.0" GridPane.columnIndex="1" GridPane.rowIndex="2"
+                              onMouseClicked="#toRead">
                             <children>
-                                <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true"/>
+                                <Label text="阅读"/>
+                                <!--  <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true"/>-->
                             </children>
                         </HBox>
-                        <HBox alignment="CENTER" prefHeight="40.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                        <HBox alignment="CENTER" prefHeight="40.0" GridPane.columnIndex="2" GridPane.rowIndex="2"
+                              onMouseClicked="#toContact">
                             <children>
-                                <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true"/>
+                                <Label text="通讯录"/>
+                                <!--  <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true"/>-->
                             </children>
                         </HBox>
 
                         <ListView prefHeight="568.0" GridPane.columnIndex="0" GridPane.columnSpan="3"
                                   GridPane.rowIndex="3">
                         </ListView>
-                        <Button mnemonicParsing="false" text="Button" GridPane.columnIndex="2" onAction="#showData"/>
+                        <Button fx:id="dropMenu" mnemonicParsing="menu" onAction="#showData" text="ddd"
+                                GridPane.columnIndex="2"/>
                     </children>
 
                 </GridPane>

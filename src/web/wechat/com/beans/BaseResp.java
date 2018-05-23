@@ -1,24 +1,42 @@
 package web.wechat.com.beans;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import java.util.Date;
 
 public class BaseResp {
+    @JSONField(name = "BaseResponse")
     private BaseResponse baseResponse;
-    private int Count;
+    @JSONField(name = "Count")
+    private int count;
+    @JSONField(name = "AddMsgCount")
     private int AddMsgCount;
-    private AddMsg[] AddMsgList;
-    private ContactList contactList;
+    @JSONField(name = "AddMsgList")
+    private AddMsg[] addMsgList;
+    @JSONField(name = "ContactList")
+    private Member[] contactList;
+    @JSONField(name = "SyncKey")
     private SyncKey syncKey;
+    @JSONField(name = "User")
     private User user;
-    private String ChatSet;
-    private String SKey;
-    private long ClientVersion;
-    private long SystemTime;
-    private int GrayScale;
-    private int InviteStartCount;
-    private int MPSubscribeMsgCount;
-    private MPSubscribeMsg[] MPSubscribeMsgList;
-    private long ClickReportInterval;
+    @JSONField(name = "ChatSet")
+    private String chatSet;
+    @JSONField(name = "SKey")
+    private String sKey;
+    @JSONField(name = "ClientVersion")
+    private long clientVersion;
+    @JSONField(name = "SystemTime")
+    private long systemTime;
+    @JSONField(name = "GrayScale")
+    private int grayScale;
+    @JSONField(name = "InviteStartCount")
+    private int inviteStartCount;
+    @JSONField(name = "MPSubscribeMsgCount")
+    private int mPSubscribeMsgCount;
+    @JSONField(name = "MPSubscribeMsgList")
+    private MPSubscribeMsg[] mPSubscribeMsgList;
+    @JSONField(name = "ClickReportInterval")
+    private long clickReportInterval;
 
     public BaseResponse getBaseResponse() {
         return baseResponse;
@@ -29,18 +47,34 @@ public class BaseResp {
     }
 
     public int getCount() {
-        return Count;
+        return count;
     }
 
     public void setCount(int count) {
-        Count = count;
+        this.count = count;
     }
 
-    public ContactList getContactList() {
+    public int getAddMsgCount() {
+        return AddMsgCount;
+    }
+
+    public void setAddMsgCount(int addMsgCount) {
+        AddMsgCount = addMsgCount;
+    }
+
+    public AddMsg[] getAddMsgList() {
+        return addMsgList;
+    }
+
+    public void setAddMsgList(AddMsg[] addMsgList) {
+        this.addMsgList = addMsgList;
+    }
+
+    public Member[] getContactList() {
         return contactList;
     }
 
-    public void setContactList(ContactList contactList) {
+    public void setContactList(Member[] contactList) {
         this.contactList = contactList;
     }
 
@@ -61,1182 +95,695 @@ public class BaseResp {
     }
 
     public String getChatSet() {
-        return ChatSet;
+        return chatSet;
     }
 
     public void setChatSet(String chatSet) {
-        ChatSet = chatSet;
+        this.chatSet = chatSet;
     }
 
-    public String getSKey() {
-        return SKey;
+    public String getsKey() {
+        return sKey;
     }
 
-    public void setSKey(String SKey) {
-        this.SKey = SKey;
+    public void setsKey(String sKey) {
+        this.sKey = sKey;
     }
 
     public long getClientVersion() {
-        return ClientVersion;
+        return clientVersion;
     }
 
     public void setClientVersion(long clientVersion) {
-        ClientVersion = clientVersion;
+        this.clientVersion = clientVersion;
     }
 
     public long getSystemTime() {
-        return SystemTime;
+        return systemTime;
     }
 
     public void setSystemTime(long systemTime) {
-        SystemTime = systemTime;
+        this.systemTime = systemTime;
     }
 
     public int getGrayScale() {
-        return GrayScale;
+        return grayScale;
     }
 
     public void setGrayScale(int grayScale) {
-        GrayScale = grayScale;
+        this.grayScale = grayScale;
     }
 
     public int getInviteStartCount() {
-        return InviteStartCount;
+        return inviteStartCount;
     }
 
     public void setInviteStartCount(int inviteStartCount) {
-        InviteStartCount = inviteStartCount;
+        this.inviteStartCount = inviteStartCount;
     }
 
-    public int getMPSubscribeMsgCount() {
-        return MPSubscribeMsgCount;
+    public int getmPSubscribeMsgCount() {
+        return mPSubscribeMsgCount;
     }
 
-    public void setMPSubscribeMsgCount(int MPSubscribeMsgCount) {
-        this.MPSubscribeMsgCount = MPSubscribeMsgCount;
+    public void setmPSubscribeMsgCount(int mPSubscribeMsgCount) {
+        this.mPSubscribeMsgCount = mPSubscribeMsgCount;
     }
 
-    public MPSubscribeMsg[] getMPSubscribeMsgList() {
-        return MPSubscribeMsgList;
+    public MPSubscribeMsg[] getmPSubscribeMsgList() {
+        return mPSubscribeMsgList;
     }
 
-    public void setMPSubscribeMsgList(MPSubscribeMsg[] MPSubscribeMsgList) {
-        this.MPSubscribeMsgList = MPSubscribeMsgList;
+    public void setmPSubscribeMsgList(MPSubscribeMsg[] mPSubscribeMsgList) {
+        this.mPSubscribeMsgList = mPSubscribeMsgList;
     }
 
     public long getClickReportInterval() {
-        return ClickReportInterval;
+        return clickReportInterval;
     }
 
     public void setClickReportInterval(long clickReportInterval) {
-        ClickReportInterval = clickReportInterval;
+        this.clickReportInterval = clickReportInterval;
     }
 }
 
 class RecommendInfos {
-    private String UserName;
-    private String NickName;
-    private int QQNum;
-    private String Province;
-    private String City;
-    private String Content;
-    private String Signature;
-    private String Alias;
-    private int Scene;
-    private int VerifyFlag;
-    private int AttrStatus;
-    private int Sex;
-    private String Ticket;
-    private int OpCode;
+    @JSONField(name = "UserName")
+    private String userName;
+    @JSONField(name = "NickName")
+    private String nickName;
+    @JSONField(name = "QQNum")
+    private int qQNum;
+    @JSONField(name = "Province")
+    private String province;
+    @JSONField(name = "City")
+    private String city;
+    @JSONField(name = "Content")
+    private String content;
+    @JSONField(name = "Signature")
+    private String signature;
+    @JSONField(name = "Alias")
+    private String alias;
+    @JSONField(name = "Scene")
+    private int scene;
+    @JSONField(name = "VerifyFlag")
+    private int verifyFlag;
+    @JSONField(name = "AttrStatus")
+    private int attrStatus;
+    @JSONField(name = "Sex;")
+    private int sex;
+    @JSONField(name = "Ticket")
+    private String ticket;
+    @JSONField(name = "OpCode")
+    private int opCode;
 
     public String getUserName() {
-        return UserName;
+        return userName;
     }
 
     public void setUserName(String userName) {
-        UserName = userName;
+        this.userName = userName;
     }
 
     public String getNickName() {
-        return NickName;
+        return nickName;
     }
 
     public void setNickName(String nickName) {
-        NickName = nickName;
+        this.nickName = nickName;
     }
 
-    public int getQQNum() {
-        return QQNum;
+    public int getqQNum() {
+        return qQNum;
     }
 
-    public void setQQNum(int QQNum) {
-        this.QQNum = QQNum;
+    public void setqQNum(int qQNum) {
+        this.qQNum = qQNum;
     }
 
     public String getProvince() {
-        return Province;
+        return province;
     }
 
     public void setProvince(String province) {
-        Province = province;
+        this.province = province;
     }
 
     public String getCity() {
-        return City;
+        return city;
     }
 
     public void setCity(String city) {
-        City = city;
+        this.city = city;
     }
 
     public String getContent() {
-        return Content;
+        return content;
     }
 
     public void setContent(String content) {
-        Content = content;
+        this.content = content;
     }
 
     public String getSignature() {
-        return Signature;
+        return signature;
     }
 
     public void setSignature(String signature) {
-        Signature = signature;
+        this.signature = signature;
     }
 
     public String getAlias() {
-        return Alias;
+        return alias;
     }
 
     public void setAlias(String alias) {
-        Alias = alias;
+        this.alias = alias;
     }
 
     public int getScene() {
-        return Scene;
+        return scene;
     }
 
     public void setScene(int scene) {
-        Scene = scene;
+        this.scene = scene;
     }
 
     public int getVerifyFlag() {
-        return VerifyFlag;
+        return verifyFlag;
     }
 
     public void setVerifyFlag(int verifyFlag) {
-        VerifyFlag = verifyFlag;
+        this.verifyFlag = verifyFlag;
     }
 
     public int getAttrStatus() {
-        return AttrStatus;
+        return attrStatus;
     }
 
     public void setAttrStatus(int attrStatus) {
-        AttrStatus = attrStatus;
+        this.attrStatus = attrStatus;
     }
 
     public int getSex() {
-        return Sex;
+        return sex;
     }
 
     public void setSex(int sex) {
-        Sex = sex;
+        this.sex = sex;
     }
 
     public String getTicket() {
-        return Ticket;
+        return ticket;
     }
 
     public void setTicket(String ticket) {
-        Ticket = ticket;
+        this.ticket = ticket;
     }
 
     public int getOpCode() {
-        return OpCode;
+        return opCode;
     }
 
     public void setOpCode(int opCode) {
-        OpCode = opCode;
+        this.opCode = opCode;
     }
 }
 
 class AddMsg {
-    private long MsgId;
-    private String FromUserName;
-    private String ToUserName;
-    private int MsgType;
-    private String Content;
-    private int Status;
+    @JSONField(name = "MsgId")
+    private long msgId;
+    @JSONField(name = "FromUserName")
+    private String fromUserName;
+    @JSONField(name = "ToUserName")
+    private String toUserName;
+    @JSONField(name = "MsgType")
+    private int msgType;
+    @JSONField(name = "Content")
+    private String content;
+    @JSONField(name = "Status")
+    private int status;
+    @JSONField(name = "ImgStatus")
 
-    private int ImgStatus;
-    private int CreateTime;
-    private int VoiceLength;
-    private int PlayLength;
+    private int imgStatus;
+    @JSONField(name = "CreateTime")
+    private int createTime;
+    @JSONField(name = "VoiceLength")
+    private int voiceLength;
+    @JSONField(name = "PlayLength")
+    private int playLength;
+    @JSONField(name = "FileName")
 
-    private String FileName;
-    private String FileSize;
-    private String MediaId;
-    private String Url;
+    private String fileName;
+    @JSONField(name = "FileSize")
+    private String fileSize;
+    @JSONField(name = "MediaId")
+    private String mediaId;
+    @JSONField(name = "Url")
+    private String url;
+    @JSONField(name = "AppMsgType")
 
-    private int AppMsgType;
-    private int StatusNotifyCode;
+    private int appMsgType;
+    @JSONField(name = "StatusNotifyCode")
+    private int statusNotifyCode;
+    @JSONField(name = "StatusNotifyUserName")
 
-    private String StatusNotifyUserName;
-    private RecommendInfos RecommendInfo;
-    private int ForwardFlag;
-    private AppInfos AppInfo;
-    private int HasProductId;
-    private String Ticket;
-    private int ImgHeight;
-    private int ImgWidth;
-    private int SubMsgType;
-    private int NewMsgId;
-    private String OriContent;
-    private String EncryFileName;
+    private String statusNotifyUserName;
+    @JSONField(name = "RecommendInfo")
+    private RecommendInfos recommendInfo;
+    @JSONField(name = "ForwardFlag")
+    private int forwardFlag;
+    @JSONField(name = "AppInfo")
+    private AppInfos appInfo;
+    @JSONField(name = "HasProductId")
+    private int hasProductId;
+    @JSONField(name = "Ticket")
+    private String ticket;
+    @JSONField(name = "ImgHeight")
+    private int imgHeight;
+    @JSONField(name = "ImgWidth")
+    private int imgWidth;
+    @JSONField(name = "SubMsgType")
+    private int subMsgType;
+    @JSONField(name = "NewMsgId")
+    private int newMsgId;
+    @JSONField(name = "OriContent")
+    private String oriContent;
+    @JSONField(name = "EncryFileName")
+    private String encryFileName;
 
     public long getMsgId() {
-        return MsgId;
+        return msgId;
     }
 
     public void setMsgId(long msgId) {
-        MsgId = msgId;
+        this.msgId = msgId;
     }
 
     public String getFromUserName() {
-        return FromUserName;
+        return fromUserName;
     }
 
     public void setFromUserName(String fromUserName) {
-        FromUserName = fromUserName;
+        this.fromUserName = fromUserName;
     }
 
     public String getToUserName() {
-        return ToUserName;
+        return toUserName;
     }
 
     public void setToUserName(String toUserName) {
-        ToUserName = toUserName;
+        this.toUserName = toUserName;
     }
 
     public int getMsgType() {
-        return MsgType;
+        return msgType;
     }
 
     public void setMsgType(int msgType) {
-        MsgType = msgType;
+        this.msgType = msgType;
     }
 
     public String getContent() {
-        return Content;
+        return content;
     }
 
     public void setContent(String content) {
-        Content = content;
+        this.content = content;
     }
 
     public int getStatus() {
-        return Status;
+        return status;
     }
 
     public void setStatus(int status) {
-        Status = status;
+        this.status = status;
     }
 
     public int getImgStatus() {
-        return ImgStatus;
+        return imgStatus;
     }
 
     public void setImgStatus(int imgStatus) {
-        ImgStatus = imgStatus;
+        this.imgStatus = imgStatus;
     }
 
     public int getCreateTime() {
-        return CreateTime;
+        return createTime;
     }
 
     public void setCreateTime(int createTime) {
-        CreateTime = createTime;
+        this.createTime = createTime;
     }
 
     public int getVoiceLength() {
-        return VoiceLength;
+        return voiceLength;
     }
 
     public void setVoiceLength(int voiceLength) {
-        VoiceLength = voiceLength;
+        this.voiceLength = voiceLength;
     }
 
     public int getPlayLength() {
-        return PlayLength;
+        return playLength;
     }
 
     public void setPlayLength(int playLength) {
-        PlayLength = playLength;
+        this.playLength = playLength;
     }
 
     public String getFileName() {
-        return FileName;
+        return fileName;
     }
 
     public void setFileName(String fileName) {
-        FileName = fileName;
+        this.fileName = fileName;
     }
 
     public String getFileSize() {
-        return FileSize;
+        return fileSize;
     }
 
     public void setFileSize(String fileSize) {
-        FileSize = fileSize;
+        this.fileSize = fileSize;
     }
 
     public String getMediaId() {
-        return MediaId;
+        return mediaId;
     }
 
     public void setMediaId(String mediaId) {
-        MediaId = mediaId;
+        this.mediaId = mediaId;
     }
 
     public String getUrl() {
-        return Url;
+        return url;
     }
 
     public void setUrl(String url) {
-        Url = url;
+        this.url = url;
     }
 
     public int getAppMsgType() {
-        return AppMsgType;
+        return appMsgType;
     }
 
     public void setAppMsgType(int appMsgType) {
-        AppMsgType = appMsgType;
+        this.appMsgType = appMsgType;
     }
 
     public int getStatusNotifyCode() {
-        return StatusNotifyCode;
+        return statusNotifyCode;
     }
 
     public void setStatusNotifyCode(int statusNotifyCode) {
-        StatusNotifyCode = statusNotifyCode;
+        this.statusNotifyCode = statusNotifyCode;
     }
 
     public String getStatusNotifyUserName() {
-        return StatusNotifyUserName;
+        return statusNotifyUserName;
     }
 
     public void setStatusNotifyUserName(String statusNotifyUserName) {
-        StatusNotifyUserName = statusNotifyUserName;
+        this.statusNotifyUserName = statusNotifyUserName;
     }
 
     public RecommendInfos getRecommendInfo() {
-        return RecommendInfo;
+        return recommendInfo;
     }
 
     public void setRecommendInfo(RecommendInfos recommendInfo) {
-        RecommendInfo = recommendInfo;
+        this.recommendInfo = recommendInfo;
     }
 
     public int getForwardFlag() {
-        return ForwardFlag;
+        return forwardFlag;
     }
 
     public void setForwardFlag(int forwardFlag) {
-        ForwardFlag = forwardFlag;
+        this.forwardFlag = forwardFlag;
     }
 
     public AppInfos getAppInfo() {
-        return AppInfo;
+        return appInfo;
     }
 
     public void setAppInfo(AppInfos appInfo) {
-        AppInfo = appInfo;
+        this.appInfo = appInfo;
     }
 
     public int getHasProductId() {
-        return HasProductId;
+        return hasProductId;
     }
 
     public void setHasProductId(int hasProductId) {
-        HasProductId = hasProductId;
+        this.hasProductId = hasProductId;
     }
 
     public String getTicket() {
-        return Ticket;
+        return ticket;
     }
 
     public void setTicket(String ticket) {
-        Ticket = ticket;
+        this.ticket = ticket;
     }
 
     public int getImgHeight() {
-        return ImgHeight;
+        return imgHeight;
     }
 
     public void setImgHeight(int imgHeight) {
-        ImgHeight = imgHeight;
+        this.imgHeight = imgHeight;
     }
 
     public int getImgWidth() {
-        return ImgWidth;
+        return imgWidth;
     }
 
     public void setImgWidth(int imgWidth) {
-        ImgWidth = imgWidth;
+        this.imgWidth = imgWidth;
     }
 
     public int getSubMsgType() {
-        return SubMsgType;
+        return subMsgType;
     }
 
     public void setSubMsgType(int subMsgType) {
-        SubMsgType = subMsgType;
+        this.subMsgType = subMsgType;
     }
 
     public int getNewMsgId() {
-        return NewMsgId;
+        return newMsgId;
     }
 
     public void setNewMsgId(int newMsgId) {
-        NewMsgId = newMsgId;
+        this.newMsgId = newMsgId;
     }
 
     public String getOriContent() {
-        return OriContent;
+        return oriContent;
     }
 
     public void setOriContent(String oriContent) {
-        OriContent = oriContent;
+        this.oriContent = oriContent;
     }
 
     public String getEncryFileName() {
-        return EncryFileName;
+        return encryFileName;
     }
 
     public void setEncryFileName(String encryFileName) {
-        EncryFileName = encryFileName;
+        this.encryFileName = encryFileName;
     }
 }
 
 class AppInfos {
-    private String AppId;
-    private int Type;
+    @JSONField(name = "AppId")
+    private String appId;
+    @JSONField(name = "Type")
+    private int type;
 
     public String getAppId() {
-        return AppId;
+        return appId;
     }
 
     public void setAppId(String appId) {
-        AppId = appId;
+        this.appId = appId;
     }
 
     public int getType() {
-        return Type;
+        return type;
     }
 
     public void setType(int type) {
-        Type = type;
+        this.type = type;
     }
 }
 
 class MPSubscribeMsg {
-    private String UserName;
-    private int MPArticleCount;
-    private MPArticle[] MPArticleList;
-    private Date Time;
-    private String NickName;
+    @JSONField(name = "UserName")
+    private String userName;
+    @JSONField(name = "MPArticleCount")
+    private int mPArticleCount;
+    @JSONField(name = "MPArticleList")
+    private MPArticle[] mPArticleList;
+    @JSONField(name = "Time")
+    private Date time;
+    @JSONField(name = "NickName")
+    private String nickName;
 
     public String getUserName() {
-        return UserName;
+        return userName;
     }
 
     public void setUserName(String userName) {
-        UserName = userName;
+        this.userName = userName;
     }
 
-    public int getMPArticleCount() {
-        return MPArticleCount;
+    public int getmPArticleCount() {
+        return mPArticleCount;
     }
 
-    public void setMPArticleCount(int MPArticleCount) {
-        this.MPArticleCount = MPArticleCount;
+    public void setmPArticleCount(int mPArticleCount) {
+        this.mPArticleCount = mPArticleCount;
     }
 
-    public MPArticle[] getMPArticleList() {
-        return MPArticleList;
+    public MPArticle[] getmPArticleList() {
+        return mPArticleList;
     }
 
-    public void setMPArticleList(MPArticle[] MPArticleList) {
-        this.MPArticleList = MPArticleList;
+    public void setmPArticleList(MPArticle[] mPArticleList) {
+        this.mPArticleList = mPArticleList;
     }
 
     public Date getTime() {
-        return Time;
+        return time;
     }
 
     public void setTime(Date time) {
-        Time = time;
+        this.time = time;
     }
 
     public String getNickName() {
-        return NickName;
+        return nickName;
     }
 
     public void setNickName(String nickName) {
-        NickName = nickName;
+        this.nickName = nickName;
     }
 }
 
 class MPArticle {
-    private String Title;
-    private String Digest;
-    private String Cover;
-    private String Url;
+    @JSONField(name = "Title")
+    private String title;
+    @JSONField(name = "Digest")
+    private String digest;
+    @JSONField(name = "Cover")
+    private String cover;
+    @JSONField(name = "Url")
+    private String url;
 
     public String getTitle() {
-        return Title;
+        return title;
     }
 
     public void setTitle(String title) {
-        Title = title;
+        this.title = title;
     }
 
     public String getDigest() {
-        return Digest;
+        return digest;
     }
 
     public void setDigest(String digest) {
-        Digest = digest;
+        this.digest = digest;
     }
 
     public String getCover() {
-        return Cover;
+        return cover;
     }
 
     public void setCover(String cover) {
-        Cover = cover;
+        this.cover = cover;
     }
 
     public String getUrl() {
-        return Url;
+        return url;
     }
 
     public void setUrl(String url) {
-        Url = url;
+        this.url = url;
     }
 }
 
 class BaseResponse {
-    private int Ret;
-    private String ErrMsg;
+    @JSONField(name = "Ret")
+    private int ret;
+    @JSONField(name = "ErrMsg")
+    private String errMsg;
 
     public int getRet() {
-        return Ret;
+        return ret;
     }
 
     public void setRet(int ret) {
-        Ret = ret;
+        this.ret = ret;
     }
 
     public String getErrMsg() {
-        return ErrMsg;
+        return errMsg;
     }
 
     public void setErrMsg(String errMsg) {
-        ErrMsg = errMsg;
-    }
-
-    @Override
-    public String toString() {
-        return "BaseResponse{" +
-                "Ret=" + Ret +
-                ", ErrMsg='" + ErrMsg + '\'' +
-                '}';
+        this.errMsg = errMsg;
     }
 }
 
 
-class Member {
-    private int Uin;
-    private String UserName;
-    private String NickName;
-    private int AttrStatus;
-    private String PYInitial;
-    private String PYQuanPin;
-    private String RemarkPYInitial;
-    private String RemarkPYQuanPin;
-    private int MemberStatus;
-    private String DisplayName;
-    private String KeyWord;
-
-    public int getUin() {
-        return Uin;
-    }
-
-    public void setUin(int uin) {
-        Uin = uin;
-    }
-
-    public String getUserName() {
-        return UserName;
-    }
-
-    public void setUserName(String userName) {
-        UserName = userName;
-    }
-
-    public String getNickName() {
-        return NickName;
-    }
-
-    public void setNickName(String nickName) {
-        NickName = nickName;
-    }
-
-    public int getAttrStatus() {
-        return AttrStatus;
-    }
-
-    public void setAttrStatus(int attrStatus) {
-        AttrStatus = attrStatus;
-    }
-
-    public String getPYInitial() {
-        return PYInitial;
-    }
-
-    public void setPYInitial(String PYInitial) {
-        this.PYInitial = PYInitial;
-    }
-
-    public String getPYQuanPin() {
-        return PYQuanPin;
-    }
-
-    public void setPYQuanPin(String PYQuanPin) {
-        this.PYQuanPin = PYQuanPin;
-    }
-
-    public String getRemarkPYInitial() {
-        return RemarkPYInitial;
-    }
-
-    public void setRemarkPYInitial(String remarkPYInitial) {
-        RemarkPYInitial = remarkPYInitial;
-    }
-
-    public String getRemarkPYQuanPin() {
-        return RemarkPYQuanPin;
-    }
-
-    public void setRemarkPYQuanPin(String remarkPYQuanPin) {
-        RemarkPYQuanPin = remarkPYQuanPin;
-    }
-
-    public int getMemberStatus() {
-        return MemberStatus;
-    }
-
-    public void setMemberStatus(int memberStatus) {
-        MemberStatus = memberStatus;
-    }
-
-    public String getDisplayName() {
-        return DisplayName;
-    }
-
-    public void setDisplayName(String displayName) {
-        DisplayName = displayName;
-    }
-
-    public String getKeyWord() {
-        return KeyWord;
-    }
-
-    public void setKeyWord(String keyWord) {
-        KeyWord = keyWord;
-    }
-}
-
-class ContactList {
-    private int Uin;
-    private String UserName;
-    private String NickName;
-    private String HeadImgUrl;
-    private int ContactFlag;
-    private int MemberCount;
-    private Member[] MemberList;
-    private String RemarkName;
-    private int HideInputBarFlag;
-    private int Sex;
-    private String Signature;
-    private int VerifyFlag;
-    private int OwnerUin;
-    private String PYInitial;
-    private String PYQuanPin;
-    private String RemarkPYInitial;
-    private int StarFriend;
-    private int AppAccountFlag;
-    private int Statues;
-    private int AttrStatus;
-    private String Province;
-    private String City;
-    private String Alias;
-    private int SnsFlag;
-    private int UniFriend;
-    private String DisplayName;
-    private int ChatRoomId;
-    private String KeyWord;
-    private String EncryChatRoomId;
-    private int IsOwner;
-
-    public int getUin() {
-        return Uin;
-    }
-
-    public void setUin(int uin) {
-        Uin = uin;
-    }
-
-    public String getUserName() {
-        return UserName;
-    }
-
-    public void setUserName(String userName) {
-        UserName = userName;
-    }
-
-    public String getNickName() {
-        return NickName;
-    }
-
-    public void setNickName(String nickName) {
-        NickName = nickName;
-    }
-
-    public String getHeadImgUrl() {
-        return HeadImgUrl;
-    }
-
-    public void setHeadImgUrl(String headImgUrl) {
-        HeadImgUrl = headImgUrl;
-    }
-
-    public int getContactFlag() {
-        return ContactFlag;
-    }
-
-    public void setContactFlag(int contactFlag) {
-        ContactFlag = contactFlag;
-    }
-
-    public int getMemberCount() {
-        return MemberCount;
-    }
-
-    public void setMemberCount(int memberCount) {
-        MemberCount = memberCount;
-    }
-
-    public Member[] getMemberList() {
-        return MemberList;
-    }
-
-    public void setMemberList(Member[] memberList) {
-        MemberList = memberList;
-    }
-
-    public String getRemarkName() {
-        return RemarkName;
-    }
-
-    public void setRemarkName(String remarkName) {
-        RemarkName = remarkName;
-    }
-
-    public int getHideInputBarFlag() {
-        return HideInputBarFlag;
-    }
-
-    public void setHideInputBarFlag(int hideInputBarFlag) {
-        HideInputBarFlag = hideInputBarFlag;
-    }
-
-    public int getSex() {
-        return Sex;
-    }
-
-    public void setSex(int sex) {
-        Sex = sex;
-    }
-
-    public String getSignature() {
-        return Signature;
-    }
-
-    public void setSignature(String signature) {
-        Signature = signature;
-    }
-
-    public int getVerifyFlag() {
-        return VerifyFlag;
-    }
-
-    public void setVerifyFlag(int verifyFlag) {
-        VerifyFlag = verifyFlag;
-    }
-
-    public int getOwnerUin() {
-        return OwnerUin;
-    }
-
-    public void setOwnerUin(int ownerUin) {
-        OwnerUin = ownerUin;
-    }
-
-    public String getPYInitial() {
-        return PYInitial;
-    }
-
-    public void setPYInitial(String PYInitial) {
-        this.PYInitial = PYInitial;
-    }
-
-    public String getPYQuanPin() {
-        return PYQuanPin;
-    }
-
-    public void setPYQuanPin(String PYQuanPin) {
-        this.PYQuanPin = PYQuanPin;
-    }
-
-    public String getRemarkPYInitial() {
-        return RemarkPYInitial;
-    }
-
-    public void setRemarkPYInitial(String remarkPYInitial) {
-        RemarkPYInitial = remarkPYInitial;
-    }
-
-    public int getStarFriend() {
-        return StarFriend;
-    }
-
-    public void setStarFriend(int starFriend) {
-        StarFriend = starFriend;
-    }
-
-    public int getAppAccountFlag() {
-        return AppAccountFlag;
-    }
-
-    public void setAppAccountFlag(int appAccountFlag) {
-        AppAccountFlag = appAccountFlag;
-    }
-
-    public int getStatues() {
-        return Statues;
-    }
-
-    public void setStatues(int statues) {
-        Statues = statues;
-    }
-
-    public int getAttrStatus() {
-        return AttrStatus;
-    }
-
-    public void setAttrStatus(int attrStatus) {
-        AttrStatus = attrStatus;
-    }
-
-    public String getProvince() {
-        return Province;
-    }
-
-    public void setProvince(String province) {
-        Province = province;
-    }
-
-    public String getCity() {
-        return City;
-    }
-
-    public void setCity(String city) {
-        City = city;
-    }
-
-    public String getAlias() {
-        return Alias;
-    }
-
-    public void setAlias(String alias) {
-        Alias = alias;
-    }
-
-    public int getSnsFlag() {
-        return SnsFlag;
-    }
-
-    public void setSnsFlag(int snsFlag) {
-        SnsFlag = snsFlag;
-    }
-
-    public int getUniFriend() {
-        return UniFriend;
-    }
-
-    public void setUniFriend(int uniFriend) {
-        UniFriend = uniFriend;
-    }
-
-    public String getDisplayName() {
-        return DisplayName;
-    }
-
-    public void setDisplayName(String displayName) {
-        DisplayName = displayName;
-    }
-
-    public int getChatRoomId() {
-        return ChatRoomId;
-    }
-
-    public void setChatRoomId(int chatRoomId) {
-        ChatRoomId = chatRoomId;
-    }
-
-    public String getKeyWord() {
-        return KeyWord;
-    }
-
-    public void setKeyWord(String keyWord) {
-        KeyWord = keyWord;
-    }
-
-    public String getEncryChatRoomId() {
-        return EncryChatRoomId;
-    }
-
-    public void setEncryChatRoomId(String encryChatRoomId) {
-        EncryChatRoomId = encryChatRoomId;
-    }
-
-    public int getIsOwner() {
-        return IsOwner;
-    }
-
-    public void setIsOwner(int isOwner) {
-        IsOwner = isOwner;
-    }
-}
 
 class SyncKey {
-    private int Count;
-    private SyncKeyValue[] List;
+    @JSONField(name = "Count")
+    private int count;
+    @JSONField(name = "List")
+    private SyncKeyValue[] list;
 
     public int getCount() {
-        return Count;
+        return count;
     }
 
     public void setCount(int count) {
-        Count = count;
+        this.count = count;
     }
 
     public SyncKeyValue[] getList() {
-        return List;
+        return list;
     }
 
     public void setList(SyncKeyValue[] list) {
-        List = list;
+        this.list = list;
     }
 }
 
 class SyncKeyValue {
-    private int Key;
-    private int Val;
+    @JSONField(name = "Key")
+    private int key;
+    @JSONField(name = "Val")
+    private int val;
 
     public int getKey() {
-        return Key;
+        return key;
     }
 
     public void setKey(int key) {
-        Key = key;
+        this.key = key;
     }
 
     public int getVal() {
-        return Val;
+        return val;
     }
 
     public void setVal(int val) {
-        Val = val;
+        this.val = val;
     }
 }
 
-class User {
-    private long Uin;
-    private String UserName;
-    private String NickName;
-    private String HeadImgUrl;
-    private String RemarkName;
-    private String PYInitial;
-    private String PYQuanPin;
-    private String RemarkPYInitial;
-    private String RemarkPYQuanPin;
-    private int HideInputBarFlag;
-    private int StarFriend;
-    private int Sex;
-    private String Signature;
-    private int AppAccountFlag;
-    private int ContactFlag;
-    private int WebWxPluginSwitch;
-    private int HeadImgFlag;
-    private int SnsFlag;
-
-    public long getUin() {
-        return Uin;
-    }
-
-    public void setUin(long uin) {
-        Uin = uin;
-    }
-
-    public String getUserName() {
-        return UserName;
-    }
-
-    public void setUserName(String userName) {
-        UserName = userName;
-    }
-
-    public String getNickName() {
-        return NickName;
-    }
-
-    public void setNickName(String nickName) {
-        NickName = nickName;
-    }
-
-    public String getHeadImgUrl() {
-        return HeadImgUrl;
-    }
-
-    public void setHeadImgUrl(String headImgUrl) {
-        HeadImgUrl = headImgUrl;
-    }
-
-    public String getRemarkName() {
-        return RemarkName;
-    }
-
-    public void setRemarkName(String remarkName) {
-        RemarkName = remarkName;
-    }
-
-    public String getPYInitial() {
-        return PYInitial;
-    }
-
-    public void setPYInitial(String PYInitial) {
-        this.PYInitial = PYInitial;
-    }
-
-    public String getPYQuanPin() {
-        return PYQuanPin;
-    }
-
-    public void setPYQuanPin(String PYQuanPin) {
-        this.PYQuanPin = PYQuanPin;
-    }
-
-    public String getRemarkPYInitial() {
-        return RemarkPYInitial;
-    }
-
-    public void setRemarkPYInitial(String remarkPYInitial) {
-        RemarkPYInitial = remarkPYInitial;
-    }
-
-    public String getRemarkPYQuanPin() {
-        return RemarkPYQuanPin;
-    }
-
-    public void setRemarkPYQuanPin(String remarkPYQuanPin) {
-        RemarkPYQuanPin = remarkPYQuanPin;
-    }
-
-    public int getHideInputBarFlag() {
-        return HideInputBarFlag;
-    }
-
-    public void setHideInputBarFlag(int hideInputBarFlag) {
-        HideInputBarFlag = hideInputBarFlag;
-    }
-
-    public int getStarFriend() {
-        return StarFriend;
-    }
-
-    public void setStarFriend(int starFriend) {
-        StarFriend = starFriend;
-    }
-
-    public int getSex() {
-        return Sex;
-    }
-
-    public void setSex(int sex) {
-        Sex = sex;
-    }
-
-    public String getSignature() {
-        return Signature;
-    }
-
-    public void setSignature(String signature) {
-        Signature = signature;
-    }
-
-    public int getAppAccountFlag() {
-        return AppAccountFlag;
-    }
-
-    public void setAppAccountFlag(int appAccountFlag) {
-        AppAccountFlag = appAccountFlag;
-    }
-
-    public int getContactFlag() {
-        return ContactFlag;
-    }
-
-    public void setContactFlag(int contactFlag) {
-        ContactFlag = contactFlag;
-    }
-
-    public int getWebWxPluginSwitch() {
-        return WebWxPluginSwitch;
-    }
-
-    public void setWebWxPluginSwitch(int webWxPluginSwitch) {
-        WebWxPluginSwitch = webWxPluginSwitch;
-    }
-
-    public int getHeadImgFlag() {
-        return HeadImgFlag;
-    }
-
-    public void setHeadImgFlag(int headImgFlag) {
-        HeadImgFlag = headImgFlag;
-    }
-
-    public int getSnsFlag() {
-        return SnsFlag;
-    }
-
-    public void setSnsFlag(int snsFlag) {
-        SnsFlag = snsFlag;
-    }
-}

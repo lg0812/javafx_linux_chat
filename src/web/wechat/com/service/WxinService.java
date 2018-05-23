@@ -21,6 +21,7 @@ import web.wechat.com.beans.Ticket;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.nio.Buffer;
@@ -66,8 +67,9 @@ public class WxinService {
             CloseableHttpResponse resp = httpResponse.get();
             HttpEntity httpEntity = resp.getEntity();
             String str = EntityUtils.toString(httpEntity);
-            baseRespInit = JSON.parseObject(str, BaseResp.class);
             log.info("webwxininit:" + str);
+            baseRespInit = JSON.parseObject(str, BaseResp.class);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -116,6 +118,23 @@ public class WxinService {
         }
         return baseResp;
     }
+
+
+    public InputStream webwxgeticon(String imageUrl) {
+        CloseableHttpClient httpClient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
+
+        HttpGet httpGet = new HttpGet("https://wx2.qq.com" + imageUrl);
+        try {
+            Optional<CloseableHttpResponse> httpResponse = Optional.of(httpClient.execute(httpGet));
+            CloseableHttpResponse resp = httpResponse.get();
+            HttpEntity httpEntity = resp.getEntity();
+            return httpEntity.getContent();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     public Ticket xmlToBean(String xml) {
         try {
