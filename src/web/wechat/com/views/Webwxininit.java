@@ -41,6 +41,7 @@ public class Webwxininit implements Initializable {
         System.out.println(this.map);
         wxinService.redictUrl(map.get("window.redirect_uri"));
         wxinService.webwxininit();
+        wxinService.webwxgetcontact();
     }
 
 

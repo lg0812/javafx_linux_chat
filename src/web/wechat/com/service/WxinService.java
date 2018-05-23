@@ -15,6 +15,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.junit.Test;
+import web.wechat.com.beans.BaseResp;
 import web.wechat.com.beans.Ticket;
 
 import javax.xml.bind.JAXBContext;
@@ -27,9 +28,11 @@ import java.util.Optional;
 
 public class WxinService {
 
+
     public static Log log = LogFactory.getLog(ScanService.class);
     CookieStore cookieStore = new BasicCookieStore();
     Ticket ticket = new Ticket();
+    BaseResp baseRespInit = new BaseResp();
 
     public void redictUrl(String url) {
         CloseableHttpClient httpClient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
@@ -48,8 +51,7 @@ public class WxinService {
     }
 
 
-    public String webwxininit() {
-        String str = "";
+    public BaseResp webwxininit() {
         CloseableHttpClient httpClient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
 
         HttpPost httpPost = new HttpPost("https://wx2.qq.com/cgi-bin/mmwebwx-bin/webwxinit?r=" + ~System.currentTimeMillis() + "&lang=en_US&pass_ticket=" + ticket.getPass_ticket());
@@ -63,15 +65,57 @@ public class WxinService {
             Optional<CloseableHttpResponse> httpResponse = Optional.of(httpClient.execute(httpPost));
             CloseableHttpResponse resp = httpResponse.get();
             HttpEntity httpEntity = resp.getEntity();
-            System.out.println(cookieStore.getCookies());
-            str = EntityUtils.toString(httpEntity);
+            String str = EntityUtils.toString(httpEntity);
+            baseRespInit = JSON.parseObject(str, BaseResp.class);
             log.info("webwxininit:" + str);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return str;
+        return baseRespInit;
     }
 
+    public BaseResp webwxgetcontact() {
+        BaseResp baseResp = new BaseResp();
+        CloseableHttpClient httpClient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
+
+        HttpGet httpGet = new HttpGet("https://wx2.qq.com/cgi-bin/mmwebwx-bin/webwxgetcontact?r=" + ~System.currentTimeMillis() + "&seq=0&skey=" + ticket.getSkey());
+        try {
+            Optional<CloseableHttpResponse> httpResponse = Optional.of(httpClient.execute(httpGet));
+            CloseableHttpResponse resp = httpResponse.get();
+            HttpEntity httpEntity = resp.getEntity();
+            String str = EntityUtils.toString(httpEntity);
+            baseResp = JSON.parseObject(str, BaseResp.class);
+            log.info("webwxgetcontact:" + str);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return baseResp;
+    }
+
+    public BaseResp webwxsync() {
+
+        BaseResp baseResp = new BaseResp();
+        CloseableHttpClient httpClient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
+
+        HttpPost httpPost = new HttpPost("https://wx2.qq.com/cgi-bin/mmwebwx-bin/webwxsync?sid=" + ticket.getWxsid() + "&skey=" + ticket.getSkey());
+        try {
+            JSONObject json = new JSONObject();
+            json.put("DeviceID", "e" + ("" + String.format("%.15f", Math.random()).substring(2, 17)));
+            json.put("Sid", ticket.getWxsid());
+            json.put("Skey", ticket.getSkey());
+            json.put("Uin", ticket.getWxuin());
+            httpPost.setEntity(new StringEntity("{\"BaseRequest\":" + JSON.toJSONString(json) + ",\"SyncKey\":" + JSON.toJSONString(baseRespInit.getSyncKey()) + ",\"rr\":" + ~System.currentTimeMillis() + "}"));
+            Optional<CloseableHttpResponse> httpResponse = Optional.of(httpClient.execute(httpPost));
+            CloseableHttpResponse resp = httpResponse.get();
+            HttpEntity httpEntity = resp.getEntity();
+            String str = EntityUtils.toString(httpEntity);
+            baseResp = JSON.parseObject(str, BaseResp.class);
+            log.info("webwxgetcontact:" + str);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return baseResp;
+    }
 
     public Ticket xmlToBean(String xml) {
         try {
