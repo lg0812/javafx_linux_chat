@@ -157,9 +157,9 @@ public class WxinService {
 
     //    @Test
     public String textCode(String str) {
-//        String str = "Linuxçˆ±å¥½è€…";
+        //        String str = "Linuxçˆ±å¥½è€…";
         //str = "Linuxç\u0088±å¥½è\u0080\u0085";
-//String str = "微信团队";
+        //String str = "微信团队";
         /** 7位ASCII字符，也叫作ISO646-US、Unicode字符集的基本拉丁块      */
         final String US_ASCII = "US-ASCII";
         /** ISO拉丁字母表 No.1，也叫做ISO-LATIN-1     */
