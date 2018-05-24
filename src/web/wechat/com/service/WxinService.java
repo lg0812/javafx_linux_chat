@@ -64,14 +64,16 @@ public class WxinService {
 //            json.put("Uin", ticket.getWxuin());
 
             RequestPayload rp = new RequestPayload(
-                    new BaseRequset(
-                            String.format("%.15f", Math.random()).substring(2, 17),
+                    new BaseRequest(
+                            "e" + String.format("%.15f", Math.random()).substring(2, 17),
                             ticket.getWxsid(),
                             ticket.getSkey(),
                             ticket.getWxuin()
                     )
             );
+            log.info(JSON.toJSONString(rp));
 
+            log.info(">>>>>>>>>>>>>>>>>>>>>>>>");
             httpPost.setEntity(new StringEntity(JSON.toJSONString(rp)));
             Optional<CloseableHttpResponse> httpResponse = Optional.of(httpClient.execute(httpPost));
             CloseableHttpResponse resp = httpResponse.get();
@@ -152,7 +154,7 @@ public class WxinService {
 //                    + JSON.toJSONString(baseRespInit.getSyncKey()) + ",\"rr\":" + ~System.currentTimeMillis() + "}"));
 
             RequestPayload rp = new RequestPayload(
-                    new BaseRequset(
+                    new BaseRequest(
                             String.format("%.15f", Math.random()).substring(2, 17),
                             ticket.getWxsid(),
                             ticket.getSkey(),
@@ -200,7 +202,7 @@ public class WxinService {
         HttpPost httpPost = new HttpPost("https://wx2.qq.com/cgi-bin/mmwebwx-bin/webwxsendmsg");
         try {
             RequestPayload rp = new RequestPayload(
-                    new BaseRequset(
+                    new BaseRequest(
                             String.format("%.15f", Math.random()).substring(2, 17),
                             ticket.getWxsid(),
                             ticket.getSkey(),
@@ -213,7 +215,7 @@ public class WxinService {
                             "",
                             1
                     ),
-                    0
+                    "0"
             );
             httpPost.setEntity(new StringEntity(JSON.toJSONString(rp)));
             Optional<CloseableHttpResponse> httpResponse = Optional.of(httpClient.execute(httpPost));

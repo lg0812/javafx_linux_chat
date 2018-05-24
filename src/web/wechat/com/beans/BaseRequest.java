@@ -2,7 +2,7 @@ package web.wechat.com.beans;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
-public class BaseRequset {
+public class BaseRequest {
     @JSONField(name = "DeviceID")
     private String deviceID;
     @JSONField(name = "Sid")
@@ -12,7 +12,7 @@ public class BaseRequset {
     @JSONField(name = "Uin")
     private String uin;
 
-    public BaseRequset(String deviceID, String sid, String skey, String uin) {
+    public BaseRequest(String deviceID, String sid, String skey, String uin) {
         this.deviceID = deviceID;
         this.sid = sid;
         this.skey = skey;

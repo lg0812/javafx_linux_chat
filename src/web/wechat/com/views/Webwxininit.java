@@ -10,10 +10,8 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import web.wechat.com.beans.BaseResp;
 import web.wechat.com.beans.Member;
 import web.wechat.com.beans.User;
@@ -88,7 +86,17 @@ public class Webwxininit implements Initializable {
                     head.setFitHeight(80);
                     HBox headHbox = new HBox(head);
                     headHbox.setAlignment(Pos.CENTER);
+
+                    Label count = new Label();
+                    count.setText("10");
+                    count.setTextFill(Color.ORANGERED);
+                    count.setLayoutX(80);
+                    count.setLayoutY(0);
+                    Pane pane = new Pane(count);
+                    pane.setPrefHeight(100);
+                    pane.setPrefWidth(100);
                     gp.add(headHbox, 0, 0);
+                    gp.add(pane, 0, 0);
 
 
                     Label nickname = new Label();

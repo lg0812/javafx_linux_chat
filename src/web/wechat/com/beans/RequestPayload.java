@@ -3,19 +3,19 @@ package web.wechat.com.beans;
 import com.alibaba.fastjson.annotation.JSONField;
 
 public class RequestPayload {
-    @JSONField(name = "BaseRequset")
-    private BaseRequset baseRequset;
+    @JSONField(name = "BaseRequest")
+    private BaseRequest baseRequest;
     @JSONField(name = "Msg")
     private Msg msg;
     @JSONField(name = "Scene")
-    private int scene;
+    private String scene;
     @JSONField(name = "SyncKey")
     private SyncKey syncKey;
     @JSONField(name = "rr")
     private String rr;
 
-    public RequestPayload(BaseRequset baseRequset, SyncKey syncKey, String rr) {
-        this.baseRequset = baseRequset;
+    public RequestPayload(BaseRequest baseRequest, SyncKey syncKey, String rr) {
+        this.baseRequest = baseRequest;
         this.syncKey = syncKey;
         this.rr = rr;
     }
@@ -36,28 +36,28 @@ public class RequestPayload {
         this.rr = rr;
     }
 
-    public RequestPayload(BaseRequset baseRequset) {
-        this.baseRequset = baseRequset;
+    public RequestPayload(BaseRequest baseRequest) {
+        this.baseRequest = baseRequest;
     }
 
 
-    public RequestPayload(BaseRequset baseRequset, Msg msg) {
-        this.baseRequset = baseRequset;
+    public RequestPayload(BaseRequest baseRequest, Msg msg) {
+        this.baseRequest = baseRequest;
         this.msg = msg;
     }
 
-    public RequestPayload(BaseRequset baseRequset, Msg msg, int scene) {
-        this.baseRequset = baseRequset;
+    public RequestPayload(BaseRequest baseRequest, Msg msg, String scene) {
+        this.baseRequest = baseRequest;
         this.msg = msg;
         this.scene = scene;
     }
 
-    public BaseRequset getBaseRequset() {
-        return baseRequset;
+    public BaseRequest getBaseRequest() {
+        return baseRequest;
     }
 
-    public void setBaseRequset(BaseRequset baseRequset) {
-        this.baseRequset = baseRequset;
+    public void setBaseRequest(BaseRequest baseRequest) {
+        this.baseRequest = baseRequest;
     }
 
     public Msg getMsg() {
@@ -68,11 +68,11 @@ public class RequestPayload {
         this.msg = msg;
     }
 
-    public int getScene() {
+    public String getScene() {
         return scene;
     }
 
-    public void setScene(int scene) {
+    public void setScene(String scene) {
         this.scene = scene;
     }
 }

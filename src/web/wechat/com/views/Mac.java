@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -46,16 +47,28 @@ public class Mac implements Initializable {
                     gp.getColumnConstraints().addAll(c1, c2);
                     gp.setPrefSize(600, 100);
                     ImageView head = new ImageView();
-                    head.setImage(new Image(item.getUrl(),true));
+                    head.setImage(new Image(item.getUrl()));
                     head.setFitWidth(80);
                     head.setFitHeight(80);
                     HBox headHbox = new HBox(head);
                     headHbox.setAlignment(Pos.CENTER);
+
+
+                    Label count = new Label();
+                    count.setText("10");
+                    count.setTextFill(Color.ORANGERED);
+                    count.setLayoutX(80);
+                    count.setLayoutY(0);
+                    Pane pane = new Pane(count);
+                    pane.setPrefHeight(100);
+                    pane.setPrefWidth(100);
+//                    pane.setBackground(new Background(new BackgroundFill(Color.ORANGERED, new CornerRadii(2), new Insets(2))));
                     gp.add(headHbox, 0, 0);
+                    gp.add(pane, 0, 0);
 
 
                     Label nickname = new Label();
-                    nickname.setText(item.getName());
+                    nickname.setText("none");
                     nickname.setPrefHeight(50);
 
                     Label msg = new Label();
