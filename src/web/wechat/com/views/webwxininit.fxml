@@ -71,7 +71,7 @@
                             </children>
                         </HBox>
 
-                        <ListView prefHeight="568.0" GridPane.columnIndex="0" GridPane.columnSpan="3"
+                        <ListView prefHeight="568.0" GridPane.columnIndex="0" GridPane.columnSpan="3" fx:id="contactList"
                                   GridPane.rowIndex="3">
                         </ListView>
                         <Button fx:id="dropMenu" mnemonicParsing="menu" onAction="#showData" text="ddd"

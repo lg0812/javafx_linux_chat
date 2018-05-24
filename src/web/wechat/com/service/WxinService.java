@@ -18,6 +18,7 @@ import org.junit.Test;
 import web.wechat.com.beans.BaseResp;
 import web.wechat.com.beans.Ticket;
 
+import javax.rmi.CORBA.Util;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
@@ -128,6 +129,7 @@ public class WxinService {
             Optional<CloseableHttpResponse> httpResponse = Optional.of(httpClient.execute(httpGet));
             CloseableHttpResponse resp = httpResponse.get();
             HttpEntity httpEntity = resp.getEntity();
+            log.info("webwxgetiocon--->");
             return httpEntity.getContent();
         } catch (IOException e) {
             e.printStackTrace();
@@ -153,14 +155,16 @@ public class WxinService {
         System.out.println("e" + ("" + String.format("%.15f", Math.random()).substring(2, 17)));
     }
 
-    @Test
-    public void textCode() throws UnsupportedEncodingException {
-        String str = "Linuxçˆ±å¥½è€…";
-
+    //    @Test
+    public String textCode(String str) {
+//        String str = "Linuxçˆ±å¥½è€…";
+        //str = "Linuxç\u0088±å¥½è\u0080\u0085";
+//String str = "微信团队";
         /** 7位ASCII字符，也叫作ISO646-US、Unicode字符集的基本拉丁块      */
         final String US_ASCII = "US-ASCII";
         /** ISO拉丁字母表 No.1，也叫做ISO-LATIN-1     */
         final String ISO_8859_1 = "ISO-8859-1";
+        final String UTF8 = "UTF-8";
         /** 8 位 UCS 转换格式     */
         final String UTF_8 = "UTF-8";
         /** 16 位 UCS 转换格式，Big Endian(最低地址存放高位字节）字节顺序     */
@@ -172,5 +176,13 @@ public class WxinService {
         /** 中文超大字符集     **/
         final String GBK = "GBK";
         final String GB2312 = "GB2312";
+        final String unicode = "Unicode";
+
+        try {
+            return new String(str.getBytes(ISO_8859_1), UTF8);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }
