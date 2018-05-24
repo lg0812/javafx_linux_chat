@@ -47,7 +47,7 @@ public class Scan implements Initializable {
 
     public void loadQrCode() {
         qrCodePostfix = scanService.jsLogin().toString();
-        qrCode.setImage(new Image("https://login.weixin.qq.com/qrcode/" + qrCodePostfix));
+        qrCode.setImage(new Image("https://login.weixin.qq.com/qrcode/" + qrCodePostfix, true));
 //        qrCode.setImage(new Image("https://www.baidu.com/img/baidu_jgylogo3.gif"));
 //        qrCode.setImage(new Image("https://ss1.bdstatic.com/5eN1bjq8AAUYm2zgoY3K/r/www/cache/static/protocol/https/soutu/img/camera_new_5606e8f.png"));
 //        Timer timer = new Timer();
@@ -72,7 +72,8 @@ public class Scan implements Initializable {
 
             if ("201".equals(map.get("window.code"))) {
                 System.out.println(map.get("window.userAvatar").split(",")[1]);
-                qrCode.setImage(new Image(new ByteArrayInputStream(Base64.getDecoder().decode(map.get("window.userAvatar").split(",")[1]))));
+                qrCode.setImage(new Image(new ByteArrayInputStream(Base64.getDecoder().
+                        decode(map.get("window.userAvatar").split(",")[1]))));
             } else if ("200".equals(map.get("window.code"))) {
                 Platform.runLater(() -> {
                     try {
