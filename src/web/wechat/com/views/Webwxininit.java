@@ -55,9 +55,8 @@ public class Webwxininit implements Initializable {
     public void initPage(Map<String, String> map) {
         this.map = map;
         System.out.println(this.map);
-        BaseResp baseResp = new BaseResp();
         wxinService.redictUrl(map.get("window.redirect_uri"));
-        baseResp = wxinService.webwxininit();
+        BaseResp baseResp = wxinService.webwxininit();
         initSelf(baseResp.getUser());
         initChat(baseResp.getContactList());
         wxinService.webwxgetcontact();
