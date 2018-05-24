@@ -176,7 +176,7 @@ public class WxinService {
         /** 中文超大字符集     **/
         final String GBK = "GBK";
         final String GB2312 = "GB2312";
-        final String unicode = "Unicode";
+        final String Unicode = "Unicode";
 
         try {
             return new String(str.getBytes(ISO_8859_1), UTF8);
