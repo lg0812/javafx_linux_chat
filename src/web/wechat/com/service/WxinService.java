@@ -15,8 +15,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.junit.Test;
-import web.wechat.com.beans.BaseResp;
-import web.wechat.com.beans.Ticket;
+import web.wechat.com.beans.*;
 
 import javax.rmi.CORBA.Util;
 import javax.xml.bind.JAXBContext;
@@ -58,12 +57,22 @@ public class WxinService {
 
         HttpPost httpPost = new HttpPost("https://wx2.qq.com/cgi-bin/mmwebwx-bin/webwxinit?r=" + ~System.currentTimeMillis() + "&lang=en_US&pass_ticket=" + ticket.getPass_ticket());
         try {
-            JSONObject json = new JSONObject();
-            json.put("DeviceID", "e" + ("" + String.format("%.15f", Math.random()).substring(2, 17)));
-            json.put("Sid", ticket.getWxsid());
-            json.put("Skey", ticket.getSkey());
-            json.put("Uin", ticket.getWxuin());
-            httpPost.setEntity(new StringEntity("{\"BaseRequest\":" + JSON.toJSONString(json) + "}"));
+//            JSONObject json = new JSONObject();
+//            json.put("DeviceID", "e" + ("" + String.format("%.15f", Math.random()).substring(2, 17)));
+//            json.put("Sid", ticket.getWxsid());
+//            json.put("Skey", ticket.getSkey());
+//            json.put("Uin", ticket.getWxuin());
+
+            RequestPayload rp = new RequestPayload(
+                    new BaseRequset(
+                            String.format("%.15f", Math.random()).substring(2, 17),
+                            ticket.getWxsid(),
+                            ticket.getSkey(),
+                            ticket.getWxuin()
+                    )
+            );
+
+            httpPost.setEntity(new StringEntity(JSON.toJSONString(rp)));
             Optional<CloseableHttpResponse> httpResponse = Optional.of(httpClient.execute(httpPost));
             CloseableHttpResponse resp = httpResponse.get();
             HttpEntity httpEntity = resp.getEntity();
@@ -75,6 +84,38 @@ public class WxinService {
             e.printStackTrace();
         }
         return baseRespInit;
+    }
+
+
+    public BaseResp wxStatusNotify() {
+        BaseResp baseResp = new BaseResp();
+        CloseableHttpClient httpClient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
+
+        HttpPost httpPost = new HttpPost("https://wx2.qq.com/cgi-bin/mmwebwx-bin/webwxstatusnotify");
+        try {
+
+            JSONObject json = new JSONObject();
+            json.put("DeviceID", "e" + ("" + String.format("%.15f", Math.random()).substring(2, 17)));
+            json.put("Sid", ticket.getWxsid());
+            json.put("Skey", ticket.getSkey());
+            json.put("Uin", ticket.getWxuin());
+            httpPost.setEntity(new StringEntity("{\"BaseRequest\":" + JSON.toJSONString(json) +
+                    ",\"ClientMsgId\":" + System.currentTimeMillis() +
+                    ",\"Code\":" + 3 +
+                    ",\"FromUserName\":" + baseRespInit.getUser().getUserName() +
+                    ",\"ToUserName\":" + baseRespInit.getUser().getUserName() +
+                    "}"));
+            Optional<CloseableHttpResponse> httpResponse = Optional.of(httpClient.execute(httpPost));
+            CloseableHttpResponse resp = httpResponse.get();
+            HttpEntity httpEntity = resp.getEntity();
+            String str = EntityUtils.toString(httpEntity);
+            baseResp = JSON.parseObject(str, BaseResp.class);
+            log.info("wxStatusNotify:" + str);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return baseResp;
     }
 
     public BaseResp webwxgetcontact() {
@@ -102,12 +143,25 @@ public class WxinService {
 
         HttpPost httpPost = new HttpPost("https://wx2.qq.com/cgi-bin/mmwebwx-bin/webwxsync?sid=" + ticket.getWxsid() + "&skey=" + ticket.getSkey());
         try {
-            JSONObject json = new JSONObject();
-            json.put("DeviceID", "e" + ("" + String.format("%.15f", Math.random()).substring(2, 17)));
-            json.put("Sid", ticket.getWxsid());
-            json.put("Skey", ticket.getSkey());
-            json.put("Uin", ticket.getWxuin());
-            httpPost.setEntity(new StringEntity("{\"BaseRequest\":" + JSON.toJSONString(json) + ",\"SyncKey\":" + JSON.toJSONString(baseRespInit.getSyncKey()) + ",\"rr\":" + ~System.currentTimeMillis() + "}"));
+//            JSONObject json = new JSONObject();
+//            json.put("DeviceID", "e" + ("" + String.format("%.15f", Math.random()).substring(2, 17)));
+//            json.put("Sid", ticket.getWxsid());
+//            json.put("Skey", ticket.getSkey());
+//            json.put("Uin", ticket.getWxuin());
+//            httpPost.setEntity(new StringEntity("{\"BaseRequest\":" + JSON.toJSONString(json) + ",\"SyncKey\":"
+//                    + JSON.toJSONString(baseRespInit.getSyncKey()) + ",\"rr\":" + ~System.currentTimeMillis() + "}"));
+
+            RequestPayload rp = new RequestPayload(
+                    new BaseRequset(
+                            String.format("%.15f", Math.random()).substring(2, 17),
+                            ticket.getWxsid(),
+                            ticket.getSkey(),
+                            ticket.getWxuin()
+                    ),
+                    baseRespInit.getSyncKey(),
+                    ~System.currentTimeMillis() + ""
+            );
+            httpPost.setEntity(new StringEntity(JSON.toJSONString(rp)));
             Optional<CloseableHttpResponse> httpResponse = Optional.of(httpClient.execute(httpPost));
             CloseableHttpResponse resp = httpResponse.get();
             HttpEntity httpEntity = resp.getEntity();
@@ -137,6 +191,42 @@ public class WxinService {
         return null;
     }
 
+
+    public BaseResp webwxsendmsg() {
+        BaseResp baseResp = new BaseResp();
+
+        CloseableHttpClient httpClient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
+
+        HttpPost httpPost = new HttpPost("https://wx2.qq.com/cgi-bin/mmwebwx-bin/webwxsendmsg");
+        try {
+            RequestPayload rp = new RequestPayload(
+                    new BaseRequset(
+                            String.format("%.15f", Math.random()).substring(2, 17),
+                            ticket.getWxsid(),
+                            ticket.getSkey(),
+                            ticket.getWxuin()
+                    ),
+                    new Msg(System.currentTimeMillis(),
+                            "",
+                            baseRespInit.getUser().getUserName(),
+                            "",
+                            "",
+                            1
+                    ),
+                    0
+            );
+            httpPost.setEntity(new StringEntity(JSON.toJSONString(rp)));
+            Optional<CloseableHttpResponse> httpResponse = Optional.of(httpClient.execute(httpPost));
+            CloseableHttpResponse resp = httpResponse.get();
+            HttpEntity httpEntity = resp.getEntity();
+            String str = EntityUtils.toString(httpEntity);
+            baseResp = JSON.parseObject(str, BaseResp.class);
+            log.info("webwxsendmsg:" + str);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return baseResp;
+    }
 
     public Ticket xmlToBean(String xml) {
         try {

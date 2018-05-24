@@ -37,6 +37,26 @@ public class BaseResp {
     private MPSubscribeMsg[] mPSubscribeMsgList;
     @JSONField(name = "ClickReportInterval")
     private long clickReportInterval;
+    @JSONField(name = "MsgID")
+    private String msgID;
+    @JSONField(name = "LocalID")
+    private String localID;
+
+    public String getMsgID() {
+        return msgID;
+    }
+
+    public void setMsgID(String msgID) {
+        this.msgID = msgID;
+    }
+
+    public String getLocalID() {
+        return localID;
+    }
+
+    public void setLocalID(String localID) {
+        this.localID = localID;
+    }
 
     public BaseResponse getBaseResponse() {
         return baseResponse;
@@ -741,28 +761,6 @@ class BaseResponse {
 
 
 
-class SyncKey {
-    @JSONField(name = "Count")
-    private int count;
-    @JSONField(name = "List")
-    private SyncKeyValue[] list;
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
-
-    public SyncKeyValue[] getList() {
-        return list;
-    }
-
-    public void setList(SyncKeyValue[] list) {
-        this.list = list;
-    }
-}
 
 class SyncKeyValue {
     @JSONField(name = "Key")
