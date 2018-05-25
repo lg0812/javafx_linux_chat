@@ -24,8 +24,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.nio.Buffer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class WxinService {
 
@@ -57,12 +62,6 @@ public class WxinService {
 
         HttpPost httpPost = new HttpPost("https://wx2.qq.com/cgi-bin/mmwebwx-bin/webwxinit?r=" + ~System.currentTimeMillis() + "&lang=en_US&pass_ticket=" + ticket.getPass_ticket());
         try {
-//            JSONObject json = new JSONObject();
-//            json.put("DeviceID", "e" + ("" + String.format("%.15f", Math.random()).substring(2, 17)));
-//            json.put("Sid", ticket.getWxsid());
-//            json.put("Skey", ticket.getSkey());
-//            json.put("Uin", ticket.getWxuin());
-
             RequestPayload rp = new RequestPayload(
                     new BaseRequest(
                             "e" + String.format("%.15f", Math.random()).substring(2, 17),
@@ -71,16 +70,8 @@ public class WxinService {
                             ticket.getWxuin()
                     )
             );
-            log.info(JSON.toJSONString(rp));
-
-            log.info(">>>>>>>>>>>>>>>>>>>>>>>>");
             httpPost.setEntity(new StringEntity(JSON.toJSONString(rp)));
-            Optional<CloseableHttpResponse> httpResponse = Optional.of(httpClient.execute(httpPost));
-            CloseableHttpResponse resp = httpResponse.get();
-            HttpEntity httpEntity = resp.getEntity();
-            String str = EntityUtils.toString(httpEntity);
-            log.info("webwxininit:" + str);
-            baseRespInit = JSON.parseObject(str, BaseResp.class);
+            baseRespInit = httpUtils(httpPost, null);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -94,8 +85,8 @@ public class WxinService {
         CloseableHttpClient httpClient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
 
         HttpPost httpPost = new HttpPost("https://wx2.qq.com/cgi-bin/mmwebwx-bin/webwxstatusnotify");
-        try {
 
+        try {
             JSONObject json = new JSONObject();
             json.put("DeviceID", "e" + ("" + String.format("%.15f", Math.random()).substring(2, 17)));
             json.put("Sid", ticket.getWxsid());
@@ -107,16 +98,10 @@ public class WxinService {
                     ",\"FromUserName\":" + baseRespInit.getUser().getUserName() +
                     ",\"ToUserName\":" + baseRespInit.getUser().getUserName() +
                     "}"));
-            Optional<CloseableHttpResponse> httpResponse = Optional.of(httpClient.execute(httpPost));
-            CloseableHttpResponse resp = httpResponse.get();
-            HttpEntity httpEntity = resp.getEntity();
-            String str = EntityUtils.toString(httpEntity);
-            baseResp = JSON.parseObject(str, BaseResp.class);
-            log.info("wxStatusNotify:" + str);
+            baseResp = httpUtils(httpPost, null);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return baseResp;
     }
 
@@ -125,18 +110,70 @@ public class WxinService {
         CloseableHttpClient httpClient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
 
         HttpGet httpGet = new HttpGet("https://wx2.qq.com/cgi-bin/mmwebwx-bin/webwxgetcontact?r=" + ~System.currentTimeMillis() + "&seq=0&skey=" + ticket.getSkey());
+        baseResp = httpUtils(null, httpGet);
+        return baseResp;
+    }
+
+
+    public BaseResp webwxbatchgetcontact() {
+        BaseResp baseResp = new BaseResp();
+        HttpPost httpPost = new HttpPost("https://wx2.qq.com/cgi-bin/mmwebwx-bin/webwxbatchgetcontact?type=ex&r=" + System.currentTimeMillis() + "&lang=en_US");
+        baseResp = httpUtils(httpPost, null);
+        return baseResp;
+    }
+
+
+    public BaseResp httpUtils(HttpPost httpPost, HttpGet httpGet) {
+        BaseResp baseResp = new BaseResp();
         try {
-            Optional<CloseableHttpResponse> httpResponse = Optional.of(httpClient.execute(httpGet));
+            CloseableHttpClient httpClient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
+            Optional<CloseableHttpResponse> httpResponse = Optional.of(httpClient.execute(httpPost == null ? httpGet : httpPost));
             CloseableHttpResponse resp = httpResponse.get();
             HttpEntity httpEntity = resp.getEntity();
-            String str = EntityUtils.toString(httpEntity);
-            baseResp = JSON.parseObject(str, BaseResp.class);
-            log.info("webwxgetcontact:" + str);
+            baseResp = JSON.parseObject(EntityUtils.toString(httpEntity), BaseResp.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
         return baseResp;
     }
+
+
+    public BaseResp synccheck() {
+
+        BaseResp baseResp = new BaseResp();
+        CloseableHttpClient httpClient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
+
+        HttpGet httpGet = new HttpGet("https://webpush.wx2.qq.com/cgi-bin/mmwebwx-bin/synccheck?r=" + System.currentTimeMillis()
+                + "&skey=" + ticket.getSkey()
+                + "&sid=" + ticket.getWxsid()
+                + "&uin=" + ticket.getWxuin()
+                + "&deviceid=" + "e" + ("" + String.format("%.15f", Math.random()).substring(2, 17))
+                + "&synckey=" + getSynckeyFromResp(baseRespInit)
+        );
+        try {
+            Optional<CloseableHttpResponse> httpResponse = Optional.of(httpClient.execute(httpGet));
+            CloseableHttpResponse resp = httpResponse.get();
+            HttpEntity httpEntity = resp.getEntity();
+            log.info(EntityUtils.toString(httpEntity));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return baseResp;
+    }
+
+    public String getSynckeyFromResp(BaseResp... br) {
+        List<SyncKeyValue> list = new ArrayList<>();
+        for (BaseResp b : br)
+            list.addAll(Arrays.asList(b.getSyncKey().getList()));
+        String str = list.stream().map(s -> s.getKey() + "_" + s.getVal()).reduce((a, b) -> (a + "|" + b)).get();
+        try {
+            str = URLEncoder.encode(str, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return str;
+    }
+
 
     public BaseResp webwxsync() {
 
@@ -145,14 +182,6 @@ public class WxinService {
 
         HttpPost httpPost = new HttpPost("https://wx2.qq.com/cgi-bin/mmwebwx-bin/webwxsync?sid=" + ticket.getWxsid() + "&skey=" + ticket.getSkey());
         try {
-//            JSONObject json = new JSONObject();
-//            json.put("DeviceID", "e" + ("" + String.format("%.15f", Math.random()).substring(2, 17)));
-//            json.put("Sid", ticket.getWxsid());
-//            json.put("Skey", ticket.getSkey());
-//            json.put("Uin", ticket.getWxuin());
-//            httpPost.setEntity(new StringEntity("{\"BaseRequest\":" + JSON.toJSONString(json) + ",\"SyncKey\":"
-//                    + JSON.toJSONString(baseRespInit.getSyncKey()) + ",\"rr\":" + ~System.currentTimeMillis() + "}"));
-
             RequestPayload rp = new RequestPayload(
                     new BaseRequest(
                             String.format("%.15f", Math.random()).substring(2, 17),
@@ -164,12 +193,7 @@ public class WxinService {
                     ~System.currentTimeMillis() + ""
             );
             httpPost.setEntity(new StringEntity(JSON.toJSONString(rp)));
-            Optional<CloseableHttpResponse> httpResponse = Optional.of(httpClient.execute(httpPost));
-            CloseableHttpResponse resp = httpResponse.get();
-            HttpEntity httpEntity = resp.getEntity();
-            String str = EntityUtils.toString(httpEntity);
-            baseResp = JSON.parseObject(str, BaseResp.class);
-            log.info("webwxgetcontact:" + str);
+            baseResp = httpUtils(httpPost, null);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -185,7 +209,6 @@ public class WxinService {
             Optional<CloseableHttpResponse> httpResponse = Optional.of(httpClient.execute(httpGet));
             CloseableHttpResponse resp = httpResponse.get();
             HttpEntity httpEntity = resp.getEntity();
-            log.info("webwxgetiocon--->");
             return httpEntity.getContent();
         } catch (IOException e) {
             e.printStackTrace();
@@ -218,12 +241,7 @@ public class WxinService {
                     "0"
             );
             httpPost.setEntity(new StringEntity(JSON.toJSONString(rp)));
-            Optional<CloseableHttpResponse> httpResponse = Optional.of(httpClient.execute(httpPost));
-            CloseableHttpResponse resp = httpResponse.get();
-            HttpEntity httpEntity = resp.getEntity();
-            String str = EntityUtils.toString(httpEntity);
-            baseResp = JSON.parseObject(str, BaseResp.class);
-            log.info("webwxsendmsg:" + str);
+            baseResp = httpUtils(httpPost, null);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -249,23 +267,15 @@ public class WxinService {
 
     //    @Test
     public String textCode(String str) {
-        //        String str = "Linuxçˆ±å¥½è€…";
+        //String str = "Linuxçˆ±å¥½è€…";
         //str = "Linuxç\u0088±å¥½è\u0080\u0085";
         //String str = "微信团队";
-        /** 7位ASCII字符，也叫作ISO646-US、Unicode字符集的基本拉丁块      */
         final String US_ASCII = "US-ASCII";
-        /** ISO拉丁字母表 No.1，也叫做ISO-LATIN-1     */
         final String ISO_8859_1 = "ISO-8859-1";
         final String UTF8 = "UTF-8";
-        /** 8 位 UCS 转换格式     */
-        final String UTF_8 = "UTF-8";
-        /** 16 位 UCS 转换格式，Big Endian(最低地址存放高位字节）字节顺序     */
         final String UTF_16BE = "UTF-16BE";
-        /** 16 位 UCS 转换格式，Litter Endian（最高地址存放地位字节）字节顺序     */
         final String UTF_16LE = "UTF-16LE";
-        /** 16 位 UCS 转换格式，字节顺序由可选的字节顺序标记来标识     */
         final String UTF_16 = "UTF-16";
-        /** 中文超大字符集     **/
         final String GBK = "GBK";
         final String GB2312 = "GB2312";
         final String Unicode = "Unicode";

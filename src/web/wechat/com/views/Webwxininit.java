@@ -58,7 +58,9 @@ public class Webwxininit implements Initializable {
         BaseResp baseResp = wxinService.webwxininit();
         initSelf(baseResp.getUser());
         initChat(baseResp.getContactList());
+        wxinService.wxStatusNotify();
         wxinService.webwxgetcontact();
+        wxinService.synccheck();
     }
 
     public void initSelf(User user) {
@@ -77,10 +79,10 @@ public class Webwxininit implements Initializable {
                 super.updateItem(item, empty);
                 if (item != null) {
                     GridPane gp = new GridPane();
-                    ColumnConstraints c1 = new ColumnConstraints(100);
-                    ColumnConstraints c2 = new ColumnConstraints(180);
+                    ColumnConstraints c1 = new ColumnConstraints(64);
+                    ColumnConstraints c2 = new ColumnConstraints(216);
                     gp.getColumnConstraints().addAll(c1, c2);
-                    gp.setPrefSize(600, 100);
+                    gp.setPrefSize(280, 64);
                     ImageView head = new ImageView();
                     head.setImage(new Image("sources/temp.png", true));
 
@@ -93,30 +95,30 @@ public class Webwxininit implements Initializable {
 
                     };
                     new Thread(task).start();
-                    head.setFitWidth(80);
-                    head.setFitHeight(80);
+                    head.setFitWidth(40);
+                    head.setFitHeight(40);
                     HBox headHbox = new HBox(head);
                     headHbox.setAlignment(Pos.CENTER);
 
                     Label count = new Label();
                     count.setText("10");
                     count.setTextFill(Color.ORANGERED);
-                    count.setLayoutX(80);
-                    count.setLayoutY(0);
+                    count.setLayoutX(48);
+                    count.setLayoutY(8);
                     Pane pane = new Pane(count);
-                    pane.setPrefHeight(100);
-                    pane.setPrefWidth(100);
+                    pane.setPrefHeight(64);
+                    pane.setPrefWidth(64);
                     gp.add(headHbox, 0, 0);
                     gp.add(pane, 0, 0);
 
 
                     Label nickname = new Label();
                     nickname.setText(wxinService.textCode(item.getNickName()));
-                    nickname.setPrefHeight(50);
+                    nickname.setPrefHeight(32);
 
                     Label msg = new Label();
                     msg.setText("none");
-                    msg.setPrefHeight(50);
+                    msg.setPrefHeight(32);
                     VBox info = new VBox(nickname, msg);
 
                     gp.add(info, 1, 0);
