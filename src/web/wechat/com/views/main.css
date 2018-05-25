@@ -15,3 +15,21 @@
     -fx-padding: 10px;
     -fx-background-color: red;
 }
+
+.expressions {
+    -fx-background-image: 'sources/icons.png';
+    -fx-background-position: -404px -398px;
+    -fx-background-size: 487px 462px;
+}
+
+.cuts {
+    -fx-background-image: 'sources/icons.png';
+    -fx-background-position: -30px -432px;
+    -fx-background-size: 487px 462px;
+}
+
+.files {
+    /*-fx-background-image: 'sources/icons.png';*/
+    /*-fx-background-position: -404px -398px;*/
+    /*-fx-background-size: 487px 462px;*/
+}

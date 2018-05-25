@@ -74,6 +74,7 @@ public class Scan implements Initializable {
                 System.out.println(map.get("window.userAvatar").split(",")[1]);
                 qrCode.setImage(new Image(new ByteArrayInputStream(Base64.getDecoder().
                         decode(map.get("window.userAvatar").split(",")[1]))));
+                resizeHeadImg("201");
             } else if ("200".equals(map.get("window.code"))) {
                 Platform.runLater(() -> {
                     try {
@@ -97,6 +98,15 @@ public class Scan implements Initializable {
         }, 1, 1, TimeUnit.SECONDS);
     }
 
+    public void resizeHeadImg(String code) {
+        if (code.equals("201")) {
+            qrCode.setFitHeight(160);
+            qrCode.setFitWidth(160);
+        } else {
+            qrCode.setFitHeight(270);
+            qrCode.setFitWidth(270);
+        }
+    }
 
     public void refresh(ActionEvent actionEvent) {
         loadQrCode();

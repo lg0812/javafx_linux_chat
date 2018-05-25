@@ -4,10 +4,13 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -50,29 +53,29 @@
                                 </opaqueInsets>
                             </TextField>
                         </HBox>
-                        <HBox alignment="CENTER" prefHeight="40.0" GridPane.rowIndex="2" onMouseClicked="#toChat">
+                        <HBox alignment="CENTER" onMouseClicked="#toChat" prefHeight="40.0" GridPane.rowIndex="2">
                             <children>
                                 <Label text="聊天"/>
                                 <!--  <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true"/>-->
                             </children>
                         </HBox>
-                        <HBox alignment="CENTER" prefHeight="40.0" GridPane.columnIndex="1" GridPane.rowIndex="2"
-                              onMouseClicked="#toRead">
+                        <HBox alignment="CENTER" onMouseClicked="#toRead" prefHeight="40.0" GridPane.columnIndex="1"
+                              GridPane.rowIndex="2">
                             <children>
                                 <Label text="阅读"/>
                                 <!--  <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true"/>-->
                             </children>
                         </HBox>
-                        <HBox alignment="CENTER" prefHeight="40.0" GridPane.columnIndex="2" GridPane.rowIndex="2"
-                              onMouseClicked="#toContact">
+                        <HBox alignment="CENTER" onMouseClicked="#toContact" prefHeight="40.0" GridPane.columnIndex="2"
+                              GridPane.rowIndex="2">
                             <children>
                                 <Label text="通讯录"/>
                                 <!--  <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true"/>-->
                             </children>
                         </HBox>
 
-                        <ListView prefHeight="568.0" GridPane.columnIndex="0" GridPane.columnSpan="3" fx:id="contactList"
-                                  GridPane.rowIndex="3">
+                        <ListView fx:id="contactList" prefHeight="568.0" GridPane.columnIndex="0"
+                                  GridPane.columnSpan="3" GridPane.rowIndex="3">
                         </ListView>
                         <Button fx:id="dropMenu" mnemonicParsing="menu" onAction="#showData" text="ddd"
                                 GridPane.columnIndex="2"/>
@@ -83,7 +86,66 @@
 
             </children>
         </AnchorPane>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0"/>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+            <children>
+                <BorderPane prefHeight="740.0" prefWidth="690.0">
+                    <top>
+                        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                            <children>
+                                <Label text="Label" fx:id="contactName"/>
+                            </children>
+                        </HBox>
+                    </top>
+                    <center>
+                        <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                            <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0"/>
+                            </content>
+                        </ScrollPane>
+                    </center>
+                    <bottom>
+                        <BorderPane prefHeight="180.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                            <top>
+                                <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="690.0"
+                                      BorderPane.alignment="CENTER">
+                                    <children>
+                                        <Button prefHeight="30.0" prefWidth="30.0" styleClass="expressions">
+                                            <HBox.margin>
+                                                <Insets left="10.0"/>
+                                            </HBox.margin>
+                                        </Button>
+                                        <Button prefHeight="30.0" prefWidth="30.0" styleClass="cuts">
+                                            <HBox.margin>
+                                                <Insets left="10.0"/>
+                                            </HBox.margin>
+                                        </Button>
+                                        <Button prefHeight="30.0" prefWidth="30.0" styleClass="files" text="file">
+                                            <HBox.margin>
+                                                <Insets left="10.0"/>
+                                            </HBox.margin>
+                                        </Button>
+                                    </children>
+                                </HBox>
+                            </top>
+                            <center>
+                                <TextArea prefHeight="84.0" prefWidth="200.0" BorderPane.alignment="CENTER"/>
+                            </center>
+                            <bottom>
+                                <HBox alignment="TOP_RIGHT" prefHeight="50.0" prefWidth="200.0"
+                                      BorderPane.alignment="TOP_RIGHT">
+                                    <children>
+                                        <Button alignment="TOP_RIGHT" mnemonicParsing="false" text="send"/>
+                                    </children>
+                                    <padding>
+                                        <Insets right="10.0" top="10.0"/>
+                                    </padding>
+                                </HBox>
+                            </bottom>
+                        </BorderPane>
+                    </bottom>
+                </BorderPane>
+            </children>
+        </AnchorPane>
 
     </items>
 </SplitPane>

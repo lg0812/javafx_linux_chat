@@ -1,5 +1,6 @@
 package web.wechat.com.views;
 
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -40,6 +41,8 @@ public class Webwxininit implements Initializable {
     private WxinService wxinService = new WxinService();
     @FXML
     private ListView<Member> contactList;
+    @FXML
+    private Label contactName;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -135,7 +138,12 @@ public class Webwxininit implements Initializable {
         });
 
         contactList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        contactList.getSelectionModel().selectedItemProperty().addListener(
+                (ObservableValue<? extends Member> m, Member oldValue, Member newValue) -> {
+                    contactName.setText(newValue.getNickName());
+                });
         contactList.setPrefSize(200, 200);
+
     }
 
     public void toChat(MouseEvent mouseEvent) {
