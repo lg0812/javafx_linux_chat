@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
+<?import javafx.scene.image.Image?>
 <AnchorPane fx:id="root" prefHeight="540.0" prefWidth="380.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="web.wechat.com.views.Mac">
    <children>
       <Label layoutX="130.0" layoutY="214.0" text="Label" />
+       <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+           <image>
+               <Image url="sources/temp.png"/>
+           </image>
+       </ImageView>
+
    </children>
 </AnchorPane>

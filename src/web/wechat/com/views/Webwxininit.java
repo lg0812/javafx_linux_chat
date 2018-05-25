@@ -2,6 +2,7 @@ package web.wechat.com.views;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -81,7 +82,17 @@ public class Webwxininit implements Initializable {
                     gp.getColumnConstraints().addAll(c1, c2);
                     gp.setPrefSize(600, 100);
                     ImageView head = new ImageView();
-                    head.setImage(new Image(wxinService.webwxgeticon(item.getHeadImgUrl())));
+                    head.setImage(new Image("sources/temp.png", true));
+
+                    Task task = new Task() {
+                        @Override
+                        protected Object call() throws Exception {
+                            head.setImage(new Image(wxinService.webwxgeticon(item.getHeadImgUrl())));
+                            return null;
+                        }
+
+                    };
+                    new Thread(task).start();
                     head.setFitWidth(80);
                     head.setFitHeight(80);
                     HBox headHbox = new HBox(head);
