@@ -162,10 +162,11 @@ public class Webwxininit implements Initializable {
     public void sendMsg(ActionEvent actionEvent) {
         String str = msgContent.getText();
         if (str != "") {
-            msg = new Msg(System.currentTimeMillis() + (String.format("%.3f", Math.random())),
+            String currentTimeStr = System.currentTimeMillis() + (String.format("%.3f", Math.random()));
+            msg = new Msg(currentTimeStr,
                     str,
                     wxinService.baseRespInit.getUser().getUserName(),
-                    System.currentTimeMillis() + (String.format("%.3f", Math.random())),
+                    currentTimeStr,
                     curMember.getUserName(),
                     1
             );
