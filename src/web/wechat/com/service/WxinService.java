@@ -261,7 +261,7 @@ public class WxinService {
     }
 
     //    @Test
-    public String textCode(String str) {
+    public static String textCode(String str) {
         //String str = "Linuxçˆ±å¥½è€…";
         //str = "Linuxç\u0088±å¥½è\u0080\u0085";
         //String str = "微信团队";

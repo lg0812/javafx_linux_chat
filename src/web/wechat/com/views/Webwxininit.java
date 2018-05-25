@@ -149,7 +149,7 @@ public class Webwxininit implements Initializable {
         contactList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         contactList.getSelectionModel().selectedItemProperty().addListener(
                 (ObservableValue<? extends Member> m, Member oldValue, Member newValue) -> {
-                    contactName.setText(newValue.getNickName());
+                    contactName.setText(WxinService.textCode(newValue.getNickName()));
                     curMember = newValue;
                 });
 

@@ -9,9 +9,9 @@ public class Msg {
     private String content;
     @JSONField(name = "FromUserName")
     private String fromUserName;
-    @JSONField(name = "ClienLocalIdtMsgId")
+    @JSONField(name = "LocalID")
     private String localId;
-    @JSONField(name = "ClieToUserNamentMsgId")
+    @JSONField(name = "ToUserName")
     private String toUserName;
     @JSONField(name = "Type")
     private int type;

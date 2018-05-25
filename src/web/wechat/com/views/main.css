@@ -33,3 +33,9 @@
     /*-fx-background-position: -404px -398px;*/
     /*-fx-background-size: 487px 462px;*/
 }
+
+.sendBtn {
+    -fx-border-width: 0;
+    -fx-border-color: transparent;
+    -fx-text-fill: #e85347;
+}
