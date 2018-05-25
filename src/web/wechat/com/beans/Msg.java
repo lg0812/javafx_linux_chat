@@ -4,11 +4,11 @@ import com.alibaba.fastjson.annotation.JSONField;
 
 public class Msg {
     @JSONField(name = "ClientMsgId")
-    private long clientMsgId;
+    private String clientMsgId;
     @JSONField(name = "Content")
     private String content;
     @JSONField(name = "FromUserName")
-    private String rromUserName;
+    private String fromUserName;
     @JSONField(name = "ClienLocalIdtMsgId")
     private String localId;
     @JSONField(name = "ClieToUserNamentMsgId")
@@ -16,20 +16,20 @@ public class Msg {
     @JSONField(name = "Type")
     private int type;
 
-    public Msg(long clientMsgId, String content, String rromUserName, String localId, String toUserName, int type) {
+    public Msg(String clientMsgId, String content, String fromUserName, String localId, String toUserName, int type) {
         this.clientMsgId = clientMsgId;
         this.content = content;
-        this.rromUserName = rromUserName;
+        this.fromUserName = fromUserName;
         this.localId = localId;
         this.toUserName = toUserName;
         this.type = type;
     }
 
-    public long getClientMsgId() {
+    public String getClientMsgId() {
         return clientMsgId;
     }
 
-    public void setClientMsgId(long clientMsgId) {
+    public void setClientMsgId(String clientMsgId) {
         this.clientMsgId = clientMsgId;
     }
 
@@ -41,12 +41,12 @@ public class Msg {
         this.content = content;
     }
 
-    public String getRromUserName() {
-        return rromUserName;
+    public String getFromUserName() {
+        return fromUserName;
     }
 
-    public void setRromUserName(String rromUserName) {
-        this.rromUserName = rromUserName;
+    public void setFromUserName(String fromUserName) {
+        this.fromUserName = fromUserName;
     }
 
     public String getLocalId() {

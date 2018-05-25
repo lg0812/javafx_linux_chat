@@ -1,5 +1,6 @@
 package web.wechat.com.views;
 
+import com.alibaba.fastjson.JSON;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,9 +15,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import web.wechat.com.beans.BaseResp;
 import web.wechat.com.beans.Member;
+import web.wechat.com.beans.Msg;
 import web.wechat.com.beans.User;
+import web.wechat.com.service.ScanService;
 import web.wechat.com.service.WxinService;
 
 import java.net.URL;
@@ -29,7 +34,7 @@ public class Webwxininit implements Initializable {
 
     @FXML
     private SplitPane mainInner;
-
+    public static Log log = LogFactory.getLog(Webwxininit.class);
 
     //    @FXML
 //    private Button first;
@@ -43,6 +48,10 @@ public class Webwxininit implements Initializable {
     private ListView<Member> contactList;
     @FXML
     private Label contactName;
+    @FXML
+    private TextArea msgContent;
+
+    private Msg msg = null;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -58,12 +67,12 @@ public class Webwxininit implements Initializable {
         this.map = map;
         System.out.println(this.map);
         wxinService.redictUrl(map.get("window.redirect_uri"));
-        BaseResp baseResp = wxinService.webwxininit();
-        initSelf(baseResp.getUser());
-        initChat(baseResp.getContactList());
-        wxinService.wxStatusNotify();
-        wxinService.webwxgetcontact();
-        wxinService.synccheck();
+        wxinService.webwxininit();
+        initSelf(wxinService.baseRespInit.getUser());
+        initChat(wxinService.baseRespInit.getContactList());
+//        wxinService.wxStatusNotify();
+//        wxinService.webwxgetcontact();
+//        wxinService.synccheck();
     }
 
     public void initSelf(User user) {
@@ -141,9 +150,28 @@ public class Webwxininit implements Initializable {
         contactList.getSelectionModel().selectedItemProperty().addListener(
                 (ObservableValue<? extends Member> m, Member oldValue, Member newValue) -> {
                     contactName.setText(newValue.getNickName());
+                    curMember = newValue;
                 });
+
         contactList.setPrefSize(200, 200);
 
+    }
+
+    private Member curMember;
+
+    public void sendMsg(ActionEvent actionEvent) {
+        String str = msgContent.getText();
+        if (str != "") {
+            msg = new Msg(System.currentTimeMillis() + (String.format("%.3f", Math.random())),
+                    str,
+                    wxinService.baseRespInit.getUser().getUserName(),
+                    System.currentTimeMillis() + (String.format("%.3f", Math.random())),
+                    curMember.getUserName(),
+                    1
+            );
+            log.info(JSON.toJSONString(msg));
+            wxinService.webwxsendmsg(msg);
+        }
     }
 
     public void toChat(MouseEvent mouseEvent) {

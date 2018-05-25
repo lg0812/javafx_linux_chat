@@ -128,13 +128,15 @@
                                 </HBox>
                             </top>
                             <center>
-                                <TextArea prefHeight="84.0" prefWidth="200.0" BorderPane.alignment="CENTER"/>
+                                <TextArea prefHeight="84.0" prefWidth="200.0" BorderPane.alignment="CENTER"
+                                          fx:id="msgContent"/>
                             </center>
                             <bottom>
                                 <HBox alignment="TOP_RIGHT" prefHeight="50.0" prefWidth="200.0"
                                       BorderPane.alignment="TOP_RIGHT">
                                     <children>
-                                        <Button alignment="TOP_RIGHT" mnemonicParsing="false" text="send"/>
+                                        <Button alignment="TOP_RIGHT" mnemonicParsing="false" text="send"
+                                                onAction="#sendMsg"/>
                                     </children>
                                     <padding>
                                         <Insets right="10.0" top="10.0"/>

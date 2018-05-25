@@ -38,7 +38,7 @@ public class WxinService {
     public static Log log = LogFactory.getLog(ScanService.class);
     CookieStore cookieStore = new BasicCookieStore();
     Ticket ticket = new Ticket();
-    BaseResp baseRespInit = new BaseResp();
+    public BaseResp baseRespInit = new BaseResp();
 
     public void redictUrl(String url) {
         CloseableHttpClient httpClient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
@@ -217,7 +217,7 @@ public class WxinService {
     }
 
 
-    public BaseResp webwxsendmsg() {
+    public BaseResp webwxsendmsg(Msg msg) {
         BaseResp baseResp = new BaseResp();
 
         CloseableHttpClient httpClient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
@@ -231,17 +231,12 @@ public class WxinService {
                             ticket.getSkey(),
                             ticket.getWxuin()
                     ),
-                    new Msg(System.currentTimeMillis(),
-                            "",
-                            baseRespInit.getUser().getUserName(),
-                            "",
-                            "",
-                            1
-                    ),
+                    msg,
                     "0"
             );
             httpPost.setEntity(new StringEntity(JSON.toJSONString(rp)));
             baseResp = httpUtils(httpPost, null);
+            log.info("send result:" + JSON.toJSONString(baseResp));
         } catch (IOException e) {
             e.printStackTrace();
         }
