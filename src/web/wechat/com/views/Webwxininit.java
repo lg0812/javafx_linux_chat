@@ -17,11 +17,9 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import web.wechat.com.beans.BaseResp;
 import web.wechat.com.beans.Member;
 import web.wechat.com.beans.Msg;
 import web.wechat.com.beans.User;
-import web.wechat.com.service.ScanService;
 import web.wechat.com.service.WxinService;
 
 import java.net.URL;
