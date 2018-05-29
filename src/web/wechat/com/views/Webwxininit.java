@@ -99,6 +99,8 @@ public class Webwxininit implements Initializable {
                         if (!"0".equals(map.get("selector"))) {
                             log.info(JSON.toJSONString("=====>nmd"));
                             BaseResp baseResp = wxinService.webwxsync();
+                        } else {
+                            Thread.sleep(5);
                         }
                         return null;
                     }
@@ -106,7 +108,7 @@ public class Webwxininit implements Initializable {
             }
         };
 
-        ss.setPeriod(Duration.seconds(2));
+        ss.setPeriod(Duration.seconds(5));
         ss.start();
 
 //        scheduledExecutorService.scheduleWithFixedDelay(() -> {
