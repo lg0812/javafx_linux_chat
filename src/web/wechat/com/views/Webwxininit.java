@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.ScheduledService;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,8 +16,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import web.wechat.com.beans.BaseResp;
 import web.wechat.com.beans.Member;
 import web.wechat.com.beans.Msg;
 import web.wechat.com.beans.User;
@@ -68,9 +71,34 @@ public class Webwxininit implements Initializable {
         wxinService.webwxininit();
         initSelf(wxinService.baseRespInit.getUser());
         initChat(wxinService.baseRespInit.getContactList());
-//        wxinService.wxStatusNotify();
-//        wxinService.webwxgetcontact();
-//        wxinService.synccheck();
+        wxinService.wxStatusNotify();
+        wxinService.webwxgetcontact();
+        wxinService.webwxbatchgetcontact();
+
+
+        ScheduledService ss = new ScheduledService() {
+            @Override
+            protected Task createTask() {
+                return new Task() {
+                    @Override
+                    protected Object call() throws Exception {
+                        Map<String, String> map = wxinService.synccheck();
+                        log.info(map.get("selector") + "=====" + map.get("selector").equals("0"));
+                        if (!"0".equals(map.get("selector"))) {
+                            log.info(JSON.toJSONString("=====>nmd"));
+                            BaseResp baseResp = wxinService.webwxsync();
+                        }
+                        return null;
+                    }
+                };
+            }
+        };
+
+        ss.setPeriod(Duration.seconds(2));
+        ss.start();
+
+//        wxinService.webwxsync();
+
     }
 
     public void initSelf(User user) {

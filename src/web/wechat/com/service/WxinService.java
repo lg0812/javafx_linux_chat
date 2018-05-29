@@ -26,10 +26,7 @@ import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.Buffer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class WxinService {
@@ -76,6 +73,7 @@ public class WxinService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        log.info("webwxininit: " + JSON.toJSONString(baseRespInit));
         return baseRespInit;
     }
 
@@ -102,6 +100,9 @@ public class WxinService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
+        log.info("wxStatusNotify: " + JSON.toJSONString(baseResp));
         return baseResp;
     }
 
@@ -111,6 +112,7 @@ public class WxinService {
 
         HttpGet httpGet = new HttpGet("https://wx2.qq.com/cgi-bin/mmwebwx-bin/webwxgetcontact?r=" + ~System.currentTimeMillis() + "&seq=0&skey=" + ticket.getSkey());
         baseResp = httpUtils(null, httpGet);
+        log.info("webwxgetcontact: " + JSON.toJSONString(baseResp));
         return baseResp;
     }
 
@@ -119,6 +121,7 @@ public class WxinService {
         BaseResp baseResp = new BaseResp();
         HttpPost httpPost = new HttpPost("https://wx2.qq.com/cgi-bin/mmwebwx-bin/webwxbatchgetcontact?type=ex&r=" + System.currentTimeMillis() + "&lang=en_US");
         baseResp = httpUtils(httpPost, null);
+        log.info("webwxbatchgetcontact: " + JSON.toJSONString(baseResp));
         return baseResp;
     }
 
@@ -130,17 +133,19 @@ public class WxinService {
             Optional<CloseableHttpResponse> httpResponse = Optional.of(httpClient.execute(httpPost == null ? httpGet : httpPost));
             CloseableHttpResponse resp = httpResponse.get();
             HttpEntity httpEntity = resp.getEntity();
+
+
             baseResp = JSON.parseObject(EntityUtils.toString(httpEntity), BaseResp.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return baseResp;
     }
 
 
-    public BaseResp synccheck() {
-
-        BaseResp baseResp = new BaseResp();
+    public Map<String, String> synccheck() {
+        Map<String, String> map = new HashMap<>();
         CloseableHttpClient httpClient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
 
         HttpGet httpGet = new HttpGet("https://webpush.wx2.qq.com/cgi-bin/mmwebwx-bin/synccheck?r=" + System.currentTimeMillis()
@@ -148,17 +153,46 @@ public class WxinService {
                 + "&sid=" + ticket.getWxsid()
                 + "&uin=" + ticket.getWxuin()
                 + "&deviceid=" + "e" + ("" + String.format("%.15f", Math.random()).substring(2, 17))
-                + "&synckey=" + getSynckeyFromResp(baseRespInit)
+                + "&synckey=" + getSynckeyFromResp(baseRespSync == null ? baseRespInit : baseRespSync)
         );
         try {
             Optional<CloseableHttpResponse> httpResponse = Optional.of(httpClient.execute(httpGet));
             CloseableHttpResponse resp = httpResponse.get();
             HttpEntity httpEntity = resp.getEntity();
-            log.info(EntityUtils.toString(httpEntity));
+            map = getFromJS(EntityUtils.toString(httpEntity));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return baseResp;
+
+        log.info("synccheck: " + JSON.toJSONString(map));
+        return map;
+    }
+
+
+    public Map<String, String> getFromJS(String str) {
+        Map<String, String> map = new HashMap<>();
+        str = str.replaceAll(".*\\{|}", "");
+        String[] keyValue = str.split(",");
+
+        for (String s : keyValue) {
+            String[] temp = s.split(":");
+            map.put(temp[0].trim().replaceAll("\'|\"", ""), temp[1].trim().replaceAll("\'|\"", ""));
+        }
+        return map;
+    }
+
+    @Test
+    public void getFromJS() {
+        String str = "window.synccheck={retcode:\"0\",selector:\"2\"}";
+        Map<String, String> map = new HashMap<>();
+        str = str.replaceAll(".*\\{|\\}", "");
+        String[] keyValue = str.split(",");
+
+        for (String s : keyValue) {
+            String[] temp = s.split(":");
+            map.put(temp[0].trim().replaceAll("\'|\"", ""), temp[1].trim().replaceAll("\'|\"", ""));
+        }
+        log.info(JSON.toJSONString(map));
     }
 
     public String getSynckeyFromResp(BaseResp... br) {
@@ -174,10 +208,10 @@ public class WxinService {
         return str;
     }
 
+    private BaseResp baseRespSync = null;
 
     public BaseResp webwxsync() {
 
-        BaseResp baseResp = new BaseResp();
         CloseableHttpClient httpClient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
 
         HttpPost httpPost = new HttpPost("https://wx2.qq.com/cgi-bin/mmwebwx-bin/webwxsync?sid=" + ticket.getWxsid() + "&skey=" + ticket.getSkey());
@@ -189,15 +223,17 @@ public class WxinService {
                             ticket.getSkey(),
                             ticket.getWxuin()
                     ),
-                    baseRespInit.getSyncKey(),
+                    (baseRespSync == null ? baseRespInit.getSyncKey() : baseRespSync.getSyncKey()),
                     ~System.currentTimeMillis() + ""
             );
             httpPost.setEntity(new StringEntity(JSON.toJSONString(rp)));
-            baseResp = httpUtils(httpPost, null);
+            baseRespSync = httpUtils(httpPost, null);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return baseResp;
+
+        log.info("webwxsync: " + JSON.toJSONString(baseRespSync));
+        return baseRespSync;
     }
 
 
@@ -240,6 +276,8 @@ public class WxinService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        log.info("webwxsendmsg: " + JSON.toJSONString(baseResp));
         return baseResp;
     }
 
