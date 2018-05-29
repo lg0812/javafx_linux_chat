@@ -84,6 +84,7 @@ public class Scan implements Initializable {
                         scene.getStylesheets().add(Scan.class.getResource("main.css").toExternalForm());
                         stage.setTitle("wechat");
                         stage.setScene(scene);
+                        stage.setResizable(true);
                         Webwxininit webwxininit = loader.<Webwxininit>getController();
                         webwxininit.startTask(map);
                         stage.show();

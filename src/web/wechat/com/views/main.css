@@ -17,13 +17,13 @@
 }
 
 .expressions {
-    -fx-background-image: 'sources/icons.png';
+    -fx-background-image: url("https://res.wx.qq.com/a/wx_fed/webwx/res/static/css/5af37c4a880a95586cd41c5b251d5562@1x.png");
     -fx-background-position: -404px -398px;
     -fx-background-size: 487px 462px;
 }
 
 .cuts {
-    -fx-background-image: 'sources/icons.png';
+    -fx-background-image: url("https://res.wx.qq.com/a/wx_fed/webwx/res/static/css/5af37c4a880a95586cd41c5b251d5562@1x.png");
     -fx-background-position: -30px -432px;
     -fx-background-size: 487px 462px;
 }
