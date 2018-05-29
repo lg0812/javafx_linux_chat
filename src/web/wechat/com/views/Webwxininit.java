@@ -1,6 +1,7 @@
 package web.wechat.com.views;
 
 import com.alibaba.fastjson.JSON;
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -8,14 +9,17 @@ import javafx.concurrent.ScheduledService;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -25,10 +29,16 @@ import web.wechat.com.beans.Msg;
 import web.wechat.com.beans.User;
 import web.wechat.com.service.WxinService;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 
 public class Webwxininit implements Initializable {
@@ -53,6 +63,8 @@ public class Webwxininit implements Initializable {
     private TextArea msgContent;
 
     private Msg msg = null;
+
+    ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(10);
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -97,8 +109,30 @@ public class Webwxininit implements Initializable {
         ss.setPeriod(Duration.seconds(2));
         ss.start();
 
-//        wxinService.webwxsync();
+//        scheduledExecutorService.scheduleWithFixedDelay(() -> {
+//            Map<String, String> syncMap = wxinService.synccheck();
+//            log.info(syncMap.get("selector") + "=====" + syncMap.get("selector").equals("0"));
+//            if (!"0".equals(syncMap.get("selector"))) {
+//                log.info(JSON.toJSONString("=====>nmd"));
+//                BaseResp baseResp = wxinService.webwxsync();
+//                log.info(JSON.toJSONString(baseResp));
+//            }
+//
+//        }, 1, 5, TimeUnit.SECONDS);
 
+//        wxinService.webwxsync();
+//        checkMsg();
+    }
+
+    public void checkMsg() {
+        Map<String, String> syncMap = wxinService.synccheck();
+        log.info(syncMap.get("selector") + "=====" + syncMap.get("selector").equals("0"));
+        if (!"0".equals(syncMap.get("selector"))) {
+            log.info(JSON.toJSONString("=====>nmd"));
+            BaseResp baseResp = wxinService.webwxsync();
+            log.info(JSON.toJSONString(baseResp));
+        }
+        checkMsg();
     }
 
     public void initSelf(User user) {

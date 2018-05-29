@@ -386,7 +386,7 @@ class AddMsg {
     @JSONField(name = "SubMsgType")
     private int subMsgType;
     @JSONField(name = "NewMsgId")
-    private int newMsgId;
+    private String newMsgId;
     @JSONField(name = "OriContent")
     private String oriContent;
     @JSONField(name = "EncryFileName")
@@ -592,11 +592,11 @@ class AddMsg {
         this.subMsgType = subMsgType;
     }
 
-    public int getNewMsgId() {
+    public String getNewMsgId() {
         return newMsgId;
     }
 
-    public void setNewMsgId(int newMsgId) {
+    public void setNewMsgId(String newMsgId) {
         this.newMsgId = newMsgId;
     }
 
