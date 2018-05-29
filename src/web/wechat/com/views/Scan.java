@@ -80,7 +80,7 @@ public class Scan implements Initializable {
                     try {
                         Stage stage = (Stage) root.getScene().getWindow();
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("webwxininit.fxml"));
-                        Scene scene = new Scene((Region) loader.load(), 1000, 720);
+                        Scene scene = new Scene((Region) loader.load());
                         scene.getStylesheets().add(Scan.class.getResource("main.css").toExternalForm());
                         stage.setTitle("wechat");
                         stage.setScene(scene);

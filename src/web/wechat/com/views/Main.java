@@ -12,7 +12,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("scan.fxml"));
         primaryStage.setTitle("Scan to login");
-        Scene scene = new Scene(root, 380, 540);
+        Scene scene = new Scene(root);
 //        Scene scene = new Scene(root, 1000, 720);
         scene.getStylesheets().add(Scan.class.getResource("main.css").toExternalForm());
         primaryStage.setScene(scene);

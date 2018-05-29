@@ -27,10 +27,9 @@ import web.wechat.com.service.WxinService;
 
 import java.net.URL;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 
 public class Webwxininit implements Initializable {
@@ -56,8 +55,6 @@ public class Webwxininit implements Initializable {
 
     private Msg msg = null;
 
-    ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(10);
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -82,27 +79,13 @@ public class Webwxininit implements Initializable {
             protected void succeeded() {
                 super.succeeded();
                 initSelf(wxinService.baseRespInit.getUser());
-                initChat(wxinService.baseRespInit.getContactList());
+                //   initChat(Arrays.asList(wxinService.baseRespInit.getContactList()).addAll(batchContact.getContactList()));
+                toChat(null);
                 syncCheckAndGet();
             }
         };
 
         new Thread(t).start();
-
-//        Service s = new Service() {
-//            @Override
-//            protected Task createTask() {
-//                return new Task() {
-//                    @Override
-//                    protected Object call() throws Exception {
-//                        initPage();
-//                        return null;
-//                    }
-//                };
-//            }
-//        };
-//
-//        s.start();
     }
 
 
@@ -114,9 +97,7 @@ public class Webwxininit implements Initializable {
                     @Override
                     protected Object call() throws Exception {
                         Map<String, String> map = wxinService.synccheck();
-                        log.info(map.get("selector") + "=====" + map.get("selector").equals("0"));
                         if (!"0".equals(map.get("selector"))) {
-                            log.info(JSON.toJSONString("=====>nmd"));
                             BaseResp baseResp = wxinService.webwxsync();
                         } else {
                             Thread.sleep(5);
@@ -131,37 +112,22 @@ public class Webwxininit implements Initializable {
         ss.start();
     }
 
+    private BaseResp contact = new BaseResp();
+    private BaseResp batchContact = new BaseResp();
+
     public void initPage() {
         System.out.println(this.map);
         wxinService.redictUrl(map.get("window.redirect_uri"));
         wxinService.webwxininit();
-
-
         wxinService.wxStatusNotify();
-        wxinService.webwxgetcontact();
-        wxinService.webwxbatchgetcontact();
+        contact = wxinService.webwxgetcontact();
+        batchContact = wxinService.webwxbatchgetcontact();
 
-
-//        scheduledExecutorService.scheduleWithFixedDelay(() -> {
-//            Map<String, String> syncMap = wxinService.synccheck();
-//            log.info(syncMap.get("selector") + "=====" + syncMap.get("selector").equals("0"));
-//            if (!"0".equals(syncMap.get("selector"))) {
-//                log.info(JSON.toJSONString("=====>nmd"));
-//                BaseResp baseResp = wxinService.webwxsync();
-//                log.info(JSON.toJSONString(baseResp));
-//            }
-//
-//        }, 1, 5, TimeUnit.SECONDS);
-
-//        wxinService.webwxsync();
-//        checkMsg();
     }
 
     public void checkMsg() {
         Map<String, String> syncMap = wxinService.synccheck();
-        log.info(syncMap.get("selector") + "=====" + syncMap.get("selector").equals("0"));
         if (!"0".equals(syncMap.get("selector"))) {
-            log.info(JSON.toJSONString("=====>nmd"));
             BaseResp baseResp = wxinService.webwxsync();
             log.info(JSON.toJSONString(baseResp));
         }
@@ -169,13 +135,13 @@ public class Webwxininit implements Initializable {
     }
 
     public void initSelf(User user) {
-//        dropMenu
         nickName.setText(user.getNickName());
         avatarIV.setImage(new Image(wxinService.webwxgeticon(user.getHeadImgUrl())));
     }
 
-    public void initChat(Member[] member) {
-        ObservableList<Member> ob = FXCollections.observableList(Arrays.asList(member));
+
+    public void initChat(List<Member> member) {
+        ObservableList<Member> ob = FXCollections.observableList(member);
         contactList.setItems(ob);
         contactList.setCellFactory(lv -> new ListCell<Member>() {
 
@@ -247,7 +213,6 @@ public class Webwxininit implements Initializable {
                 });
 
         contactList.setPrefSize(200, 200);
-
     }
 
     private Member curMember;
@@ -269,7 +234,10 @@ public class Webwxininit implements Initializable {
     }
 
     public void toChat(MouseEvent mouseEvent) {
-        System.out.println("toChat");
+        List<Member> m = Arrays.asList(wxinService.baseRespInit.getContactList());
+        List<Member> n = Arrays.asList(batchContact.getContactList());
+        m.addAll(n);
+        initChat(m);
     }
 
     public void toRead(MouseEvent mouseEvent) {
@@ -277,6 +245,6 @@ public class Webwxininit implements Initializable {
     }
 
     public void toContact(MouseEvent mouseEvent) {
-        System.out.println("toContact");
+        initChat(Arrays.asList(contact.getMemberList()));
     }
 }

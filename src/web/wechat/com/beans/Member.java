@@ -42,7 +42,7 @@ public class Member {
     @JSONField(name = "Statues")
     private int statues;
     @JSONField(name = "AttrStatus")
-    private int attrStatus;
+    private String attrStatus;
     @JSONField(name = "Province")
     private String province;
     @JSONField(name = "City")
@@ -216,11 +216,11 @@ public class Member {
         this.statues = statues;
     }
 
-    public int getAttrStatus() {
+    public String getAttrStatus() {
         return attrStatus;
     }
 
-    public void setAttrStatus(int attrStatus) {
+    public void setAttrStatus(String attrStatus) {
         this.attrStatus = attrStatus;
     }
 

@@ -15,6 +15,10 @@ public class BaseResp {
     private AddMsg[] addMsgList;
     @JSONField(name = "ContactList")
     private Member[] contactList;
+    @JSONField(name = "MemberCount")
+    private int memberCount;
+    @JSONField(name = "MemberList")
+    private Member[] memberList;
     @JSONField(name = "SyncKey")
     private SyncKey syncKey;
     @JSONField(name = "User")
@@ -41,6 +45,22 @@ public class BaseResp {
     private String msgID;
     @JSONField(name = "LocalID")
     private String localID;
+
+    public int getMemberCount() {
+        return memberCount;
+    }
+
+    public void setMemberCount(int memberCount) {
+        this.memberCount = memberCount;
+    }
+
+    public Member[] getMemberList() {
+        return memberList;
+    }
+
+    public void setMemberList(Member[] memberList) {
+        this.memberList = memberList;
+    }
 
     public String getMsgID() {
         return msgID;
@@ -209,7 +229,7 @@ class RecommendInfos {
     @JSONField(name = "VerifyFlag")
     private int verifyFlag;
     @JSONField(name = "AttrStatus")
-    private int attrStatus;
+    private String attrStatus;
     @JSONField(name = "Sex;")
     private int sex;
     @JSONField(name = "Ticket")
@@ -297,11 +317,11 @@ class RecommendInfos {
         this.verifyFlag = verifyFlag;
     }
 
-    public int getAttrStatus() {
+    public String getAttrStatus() {
         return attrStatus;
     }
 
-    public void setAttrStatus(int attrStatus) {
+    public void setAttrStatus(String attrStatus) {
         this.attrStatus = attrStatus;
     }
 
