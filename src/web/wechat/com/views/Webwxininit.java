@@ -1,7 +1,6 @@
 package web.wechat.com.views;
 
 import com.alibaba.fastjson.JSON;
-import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -9,17 +8,14 @@ import javafx.concurrent.ScheduledService;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -29,16 +25,12 @@ import web.wechat.com.beans.Msg;
 import web.wechat.com.beans.User;
 import web.wechat.com.service.WxinService;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 
 public class Webwxininit implements Initializable {
@@ -76,18 +68,45 @@ public class Webwxininit implements Initializable {
         System.out.println(map);
     }
 
-    public void initPage(Map<String, String> map) {
+
+    public void startTask(Map<String, String> map) {
         this.map = map;
-        System.out.println(this.map);
-        wxinService.redictUrl(map.get("window.redirect_uri"));
-        wxinService.webwxininit();
-        initSelf(wxinService.baseRespInit.getUser());
-        initChat(wxinService.baseRespInit.getContactList());
-        wxinService.wxStatusNotify();
-        wxinService.webwxgetcontact();
-        wxinService.webwxbatchgetcontact();
+        Task<Void> t = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                initPage();
+                return null;
+            }
+
+            @Override
+            protected void succeeded() {
+                super.succeeded();
+                initSelf(wxinService.baseRespInit.getUser());
+                initChat(wxinService.baseRespInit.getContactList());
+                syncCheckAndGet();
+            }
+        };
+
+        new Thread(t).start();
+
+//        Service s = new Service() {
+//            @Override
+//            protected Task createTask() {
+//                return new Task() {
+//                    @Override
+//                    protected Object call() throws Exception {
+//                        initPage();
+//                        return null;
+//                    }
+//                };
+//            }
+//        };
+//
+//        s.start();
+    }
 
 
+    public void syncCheckAndGet() {
         ScheduledService ss = new ScheduledService() {
             @Override
             protected Task createTask() {
@@ -110,6 +129,18 @@ public class Webwxininit implements Initializable {
 
         ss.setPeriod(Duration.seconds(5));
         ss.start();
+    }
+
+    public void initPage() {
+        System.out.println(this.map);
+        wxinService.redictUrl(map.get("window.redirect_uri"));
+        wxinService.webwxininit();
+
+
+        wxinService.wxStatusNotify();
+        wxinService.webwxgetcontact();
+        wxinService.webwxbatchgetcontact();
+
 
 //        scheduledExecutorService.scheduleWithFixedDelay(() -> {
 //            Map<String, String> syncMap = wxinService.synccheck();

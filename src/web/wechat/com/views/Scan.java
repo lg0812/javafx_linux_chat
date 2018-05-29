@@ -78,16 +78,16 @@ public class Scan implements Initializable {
             } else if ("200".equals(map.get("window.code"))) {
                 Platform.runLater(() -> {
                     try {
-                        Stage stage = new Stage();
+                        Stage stage = (Stage) root.getScene().getWindow();
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("webwxininit.fxml"));
                         Scene scene = new Scene((Region) loader.load(), 1000, 720);
                         scene.getStylesheets().add(Scan.class.getResource("main.css").toExternalForm());
                         stage.setTitle("wechat");
                         stage.setScene(scene);
                         Webwxininit webwxininit = loader.<Webwxininit>getController();
-                        webwxininit.initPage(map);
+                        webwxininit.startTask(map);
                         stage.show();
-                        root.getScene().getWindow().hide();
+//                        root.getScene().getWindow().hide();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
