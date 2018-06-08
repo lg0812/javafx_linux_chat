@@ -28,6 +28,7 @@ import web.wechat.com.beans.Msg;
 import web.wechat.com.beans.User;
 import web.wechat.com.service.WxinService;
 
+import java.io.*;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
@@ -223,6 +224,25 @@ public class Webwxininit implements Initializable {
 
     private Member curMember;
 
+
+    public void showHistoryMsgs(String fromId, List<Msg> latest) throws IOException {
+        try {
+            BufferedReader bf = new BufferedReader(new FileReader(new File(fromId)));
+            String str;
+            while ((str = bf.readLine()) != null) {
+                log.info(str);
+                Msg msg = JSON.parseObject(str, Msg.class);
+
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void saveToHistoryFile(String fromId, Msg msg) {
+
+    }
+
     public void receiveText(String str) {
 
         Label tempMsg = new Label(str);
@@ -268,6 +288,9 @@ public class Webwxininit implements Initializable {
         tempHb.setAlignment(Pos.CENTER_RIGHT);
         tempHb.setPadding(new Insets(10, 10, 10, 0));
         tempMsgList.getChildren().add(tempHb);
+
+
+        saveToHistoryFile();
     }
 
     public void sendMsg(ActionEvent actionEvent) {
