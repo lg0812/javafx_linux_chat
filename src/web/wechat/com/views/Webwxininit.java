@@ -3,13 +3,16 @@ package web.wechat.com.views;
 import com.alibaba.fastjson.JSON;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.ScheduledService;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -52,12 +55,15 @@ public class Webwxininit implements Initializable {
     private Label contactName;
     @FXML
     private TextArea msgContent;
-
+    @FXML
+    private VBox tempMsgList;
+    @FXML
+    private ScrollPane scrollMsg;
     private Msg msg = null;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        scrollMsg.vvalueProperty().bind(tempMsgList.heightProperty());
     }
 
 
@@ -217,19 +223,69 @@ public class Webwxininit implements Initializable {
 
     private Member curMember;
 
+    public void receiveText(String str) {
+
+        Label tempMsg = new Label(str);
+        tempMsg.setWrapText(true);
+        tempMsg.setMaxWidth(500);
+        tempMsg.setStyle(" -fx-border-width: 1; -fx-border-color: #dddddd; -fx-border-radius: 3; -fx-padding: 10px 15px;");
+        Pane p = new Pane();
+        p.setPrefSize(40, 40);
+        p.setBackground(new Background(new BackgroundImage(
+                //new Image(wxinService.webwxgeticon(wxinService.baseRespInit.getUser().getHeadImgUrl())),
+                new Image("sources/temp.png", true),
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER,
+                new BackgroundSize(1, 1, true, true, false, false)
+        )));
+
+        HBox tempHb = new HBox(p, tempMsg);
+        tempHb.setSpacing(10);
+        tempHb.setAlignment(Pos.CENTER_LEFT);
+        tempHb.setPadding(new Insets(10, 10, 10, 10));
+        tempMsgList.getChildren().add(tempHb);
+    }
+
+    private void sendText(String str) {
+        Label tempMsg = new Label(str);
+        tempMsg.setWrapText(true);
+        tempMsg.setMaxWidth(500);
+        tempMsg.setStyle(" -fx-border-width: 1; -fx-border-color: #dddddd; -fx-border-radius: 3; -fx-padding: 10px 15px;");
+        Pane p = new Pane();
+        p.setPrefSize(40, 40);
+        p.setBackground(new Background(new BackgroundImage(
+                //new Image(wxinService.webwxgeticon(wxinService.baseRespInit.getUser().getHeadImgUrl())),
+                new Image("sources/temp.png", true),
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER,
+                new BackgroundSize(1, 1, true, true, false, false)
+        )));
+
+        HBox tempHb = new HBox(tempMsg, p);
+        tempHb.setSpacing(10);
+        tempHb.setAlignment(Pos.CENTER_RIGHT);
+        tempHb.setPadding(new Insets(10, 10, 10, 0));
+        tempMsgList.getChildren().add(tempHb);
+    }
+
     public void sendMsg(ActionEvent actionEvent) {
         String str = msgContent.getText();
-        if (str != "") {
-            String currentTimeStr = System.currentTimeMillis() + (String.format("%.3f", Math.random()));
-            msg = new Msg(currentTimeStr,
-                    str,
-                    wxinService.baseRespInit.getUser().getUserName(),
-                    currentTimeStr,
-                    curMember.getUserName(),
-                    1
-            );
-            log.info(JSON.toJSONString(msg));
-            wxinService.webwxsendmsg(msg);
+        if (!"".equals(str)) {
+            sendText(str);
+            receiveText(str + "recreceiverecrecreceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceiveeiverecreceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceiveeiverecreceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceiveeiverecreceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceiveeiveeivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceiveeive");
+//            msgContent.setText("");
+//            String currentTimeStr = System.currentTimeMillis() + (String.format("%.3f", Math.random()));
+//            msg = new Msg(currentTimeStr,
+//                    str,
+//                    wxinService.baseRespInit.getUser().getUserName(),
+//                    currentTimeStr,
+//                    curMember.getUserName(),
+//                    1
+//            );
+//            log.info(JSON.toJSONString(msg));
+//            wxinService.webwxsendmsg(msg);
         }
     }
 

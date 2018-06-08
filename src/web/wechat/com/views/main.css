@@ -39,3 +39,12 @@
     -fx-border-color: transparent;
     -fx-text-fill: #e85347;
 }
+
+.bubbles {
+    -fx-border-width: 1;
+    -fx-border-color: #dddddd;
+    -fx-border-radius: 3;
+    -fx-start-margin: 10px;
+    -fx-end-margin: 10px;
+    -fx-padding: 10px 15px;
+}
