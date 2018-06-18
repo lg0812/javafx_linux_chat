@@ -16,6 +16,14 @@ public class Msg {
     @JSONField(name = "Type")
     private int type;
 
+
+    public Msg(String content, String fromUserName, String toUserName) {
+        this.content = content;
+        this.fromUserName = fromUserName;
+        this.toUserName = toUserName;
+    }
+
+
     public Msg(String clientMsgId, String content, String fromUserName, String localId, String toUserName, int type) {
         this.clientMsgId = clientMsgId;
         this.content = content;
@@ -71,5 +79,17 @@ public class Msg {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    @Override
+    public String toString() {
+        return "Msg{" +
+                "clientMsgId='" + clientMsgId + '\'' +
+                ", content='" + content + '\'' +
+                ", fromUserName='" + fromUserName + '\'' +
+                ", localId='" + localId + '\'' +
+                ", toUserName='" + toUserName + '\'' +
+                ", type=" + type +
+                '}';
     }
 }

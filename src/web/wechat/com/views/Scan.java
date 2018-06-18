@@ -111,6 +111,8 @@ public class Scan implements Initializable {
     }
 
     public void refresh(ActionEvent actionEvent) {
+        qrCode.setFitHeight(270);
+        qrCode.setFitWidth(270);
         loadQrCode();
     }
 

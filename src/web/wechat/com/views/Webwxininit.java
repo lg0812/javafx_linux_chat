@@ -3,7 +3,6 @@ package web.wechat.com.views;
 import com.alibaba.fastjson.JSON;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.ScheduledService;
 import javafx.concurrent.Task;
@@ -12,7 +11,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -20,20 +18,19 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
+import org.apache.commons.io.input.ReversedLinesFileReader;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import web.wechat.com.beans.BaseResp;
-import web.wechat.com.beans.Member;
-import web.wechat.com.beans.Msg;
-import web.wechat.com.beans.User;
+import org.junit.Test;
+import web.wechat.com.beans.*;
 import web.wechat.com.service.WxinService;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 
 public class Webwxininit implements Initializable {
@@ -105,7 +102,9 @@ public class Webwxininit implements Initializable {
                     protected Object call() throws Exception {
                         Map<String, String> map = wxinService.synccheck();
                         if (!"0".equals(map.get("selector"))) {
-                            BaseResp baseResp = wxinService.webwxsync();
+                            checkMsg();
+                        } else if ("1101".equals(map.get("retcode"))) {
+                            Thread.sleep(1);
                         } else {
                             Thread.sleep(5);
                         }
@@ -133,12 +132,36 @@ public class Webwxininit implements Initializable {
     }
 
     public void checkMsg() {
-        Map<String, String> syncMap = wxinService.synccheck();
-        if (!"0".equals(syncMap.get("selector"))) {
-            BaseResp baseResp = wxinService.webwxsync();
-            log.info(JSON.toJSONString(baseResp));
+        BaseResp baseResp = wxinService.webwxsync();
+        log.info("----->" + baseResp.getAddMsgList()[0].getContent());
+        for (AddMsg msg : baseResp.getAddMsgList()) {
+            for (int i = 0; i < ob.size(); i++) {
+                if (msg.getFromUserName().equals(ob.get(i).getUserName())) {
+                    saveToHistoryFile(new Msg(msg.getContent(), msg.getFromUserName(), msg.getToUserName()), false);
+                    ob.get(i).setLastestMsgContent(WxinService.textCode(msg.getContent()));
+
+                    if (contactList.getSelectionModel().getSelectedItem() != null
+                            && contactList.getSelectionModel().getSelectedItem().getUserName().equals(msg.getFromUserName())) {
+                        receiveText(msg.getContent());
+                    }
+                } else if (msg.getFromUserName().equals(wxinService.baseRespInit.getUser().getUserName()) &&
+                        msg.getToUserName().equals(ob.get(i).getUserName())) {
+                    saveToHistoryFile(new Msg(msg.getContent(), msg.getFromUserName(), msg.getToUserName()), false);
+                    ob.get(i).setLastestMsgContent(WxinService.textCode(msg.getContent()));
+                    if (contactList.getSelectionModel().getSelectedItem() != null
+                            && "filehelper".equals(contactList.getSelectionModel().getSelectedItem().getUserName())) {
+                        System.out.println("--->refresh");
+                        receiveText(msg.getContent());
+                    }
+                }
+            }
         }
-        checkMsg();
+
+        System.out.println(JSON.toJSONString(ob));
+//        Platform.runLater(() -> {
+//            contactList.setItems(null);
+//            contactList.setItems(ob);
+//        });
     }
 
     public void initSelf(User user) {
@@ -146,9 +169,13 @@ public class Webwxininit implements Initializable {
         avatarIV.setImage(new Image(wxinService.webwxgeticon(user.getHeadImgUrl())));
     }
 
+    ObservableList<Member> ob = null;
+    List<Member> obMember = null;
 
     public void initChat(List<Member> member) {
-        ObservableList<Member> ob = FXCollections.observableList(member);
+        obMember = member;
+        ob = FXCollections.observableList(member);
+
         contactList.setItems(ob);
         contactList.setCellFactory(lv -> new ListCell<Member>() {
 
@@ -157,6 +184,7 @@ public class Webwxininit implements Initializable {
                 super.updateItem(item, empty);
                 if (item != null) {
                     GridPane gp = new GridPane();
+                    gp.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
                     ColumnConstraints c1 = new ColumnConstraints(64);
                     ColumnConstraints c2 = new ColumnConstraints(216);
                     gp.getColumnConstraints().addAll(c1, c2);
@@ -177,7 +205,7 @@ public class Webwxininit implements Initializable {
                     head.setFitHeight(40);
                     HBox headHbox = new HBox(head);
                     headHbox.setAlignment(Pos.CENTER);
-
+                    headHbox.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
                     Label count = new Label();
                     count.setText("10");
                     count.setTextFill(Color.ORANGERED);
@@ -195,7 +223,7 @@ public class Webwxininit implements Initializable {
                     nickname.setPrefHeight(32);
 
                     Label msg = new Label();
-                    msg.setText("none");
+                    msg.setText(item.getLastestMsgContent());
                     msg.setPrefHeight(32);
                     VBox info = new VBox(nickname, msg);
 
@@ -217,6 +245,8 @@ public class Webwxininit implements Initializable {
                 (ObservableValue<? extends Member> m, Member oldValue, Member newValue) -> {
                     contactName.setText(WxinService.textCode(newValue.getNickName()));
                     curMember = newValue;
+                    tempMsgList.getChildren().removeAll(tempMsgList.getChildren());
+                    showHistoryMsgs(readLastSeveralLines(newValue.getUserName(), 20));
                 });
 
         contactList.setPrefSize(200, 200);
@@ -225,22 +255,30 @@ public class Webwxininit implements Initializable {
     private Member curMember;
 
 
-    public void showHistoryMsgs(String fromId, List<Msg> latest) throws IOException {
-        try {
-            BufferedReader bf = new BufferedReader(new FileReader(new File(fromId)));
-            String str;
-            while ((str = bf.readLine()) != null) {
-                log.info(str);
-                Msg msg = JSON.parseObject(str, Msg.class);
-
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+    public void showHistoryMsgs(Stack<Msg> latest) {
+        while (!latest.empty())
+            receiveText(latest.pop().getContent());
     }
 
-    private void saveToHistoryFile(String fromId, Msg msg) {
-
+    private void saveToHistoryFile(Msg msg, boolean iSend) {
+        String path = System.getProperty("user.dir") + File.separator + (iSend ? ("filehelper".equals(msg.getToUserName()) ? msg.getFromUserName() : msg.getToUserName()) : msg.getFromUserName());
+        System.out.println(path);
+        File file = new File(path);
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
+            bw.append(JSON.toJSONString(msg));
+            bw.newLine();
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void receiveText(String str) {
@@ -288,27 +326,26 @@ public class Webwxininit implements Initializable {
         tempHb.setAlignment(Pos.CENTER_RIGHT);
         tempHb.setPadding(new Insets(10, 10, 10, 0));
         tempMsgList.getChildren().add(tempHb);
-
-
-        saveToHistoryFile();
     }
 
     public void sendMsg(ActionEvent actionEvent) {
         String str = msgContent.getText();
         if (!"".equals(str)) {
             sendText(str);
-            receiveText(str + "recreceiverecrecreceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceiveeiverecreceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceiveeiverecreceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceiveeiverecreceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceiveeiveeivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceiveeive");
-//            msgContent.setText("");
-//            String currentTimeStr = System.currentTimeMillis() + (String.format("%.3f", Math.random()));
-//            msg = new Msg(currentTimeStr,
-//                    str,
-//                    wxinService.baseRespInit.getUser().getUserName(),
-//                    currentTimeStr,
-//                    curMember.getUserName(),
-//                    1
-//            );
-//            log.info(JSON.toJSONString(msg));
-//            wxinService.webwxsendmsg(msg);
+            // receiveText(str + "recreceiverecrecreceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceiveeiverecreceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceiveeiverecreceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceiveeiverecreceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceiveeiveeivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceiveeive");
+            msgContent.setText("");
+            String currentTimeStr = System.currentTimeMillis() + (String.format("%.3f", Math.random()));
+            msg = new Msg(currentTimeStr,
+                    str,
+                    wxinService.baseRespInit.getUser().getUserName(),
+                    currentTimeStr,
+                    curMember.getUserName(),
+                    1
+            );
+
+            // 将消息保存到本地消息记录中
+            saveToHistoryFile(msg, true);
+            wxinService.webwxsendmsg(msg);
         }
     }
 
@@ -325,5 +362,37 @@ public class Webwxininit implements Initializable {
 
     public void toContact(MouseEvent mouseEvent) {
         initChat(Arrays.asList(contact.getMemberList()));
+    }
+
+    public Stack<Msg> readLastSeveralLines(String uid, int count) {
+
+        if ("filehelper".equals(uid))
+            uid = wxinService.baseRespInit.getUser().getUserName();
+        String path = System.getProperty("user.dir") + File.separator + uid;
+        Stack<Msg> list = new Stack<>();
+
+        try {
+            File f = new File(path);
+            if (!f.exists())
+                f.createNewFile();
+            ReversedLinesFileReader file = new ReversedLinesFileReader(new File(path), 4096, "UTF-8");
+            String s;
+            while ((s = file.readLine()) != null && count > 0) {
+                list.push(JSON.parseObject(s, Msg.class));
+                count--;
+            }
+            file.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        for (Msg msg : list)
+            System.out.println(msg);
+        return list;
+    }
+
+    @Test
+    public void tR() {
+//        System.out.println(System.getProperty("user.dir"));
+        readLastSeveralLines("@adaab8e5b746125a256c61dfb6ca24463ba7f48ff56c064968a88fd20765ab50", 5);
     }
 }

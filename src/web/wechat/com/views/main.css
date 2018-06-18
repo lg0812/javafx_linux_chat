@@ -48,3 +48,33 @@
     -fx-end-margin: 10px;
     -fx-padding: 10px 15px;
 }
+
+.chatIcon {
+    -fx-background-image: url("/sources/icons.png");
+    -fx-background-position: -185px -96px;
+    -fx-background-size: 487px 462px;
+}
+
+.readIcon {
+    -fx-background-image: url("/sources/icons.png");
+    -fx-background-position: -376px -322px;
+    -fx-background-size: 487px 462px;
+}
+
+.contactIcon {
+    -fx-background-image: url("/sources/icons.png");
+    -fx-background-position: -220px -96px;
+    -fx-background-size: 487px 462px;
+}
+
+.dropDownIcon {
+    -fx-background-image: url("/sources/icons.png");
+    -fx-background-position: -434px -398px;
+    -fx-background-size: 487px 462px;
+    -fx-border-width: 0;
+    -fx-background-color: transparent;
+}
+
+#contactList {
+    -fx-padding: 0;
+}
