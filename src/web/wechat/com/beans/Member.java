@@ -63,14 +63,14 @@ public class Member {
     private String encryChatRoomId;
     @JSONField(name = "IsOwner")
     private int isOwner;
-    private String lastestMsgContent;
+    public String latestMsgContent;
 
-    public String getLastestMsgContent() {
-        return lastestMsgContent;
+    public String getLatestMsgContent() {
+        return latestMsgContent;
     }
 
-    public void setLastestMsgContent(String lastestMsgContent) {
-        this.lastestMsgContent = lastestMsgContent;
+    public void setLatestMsgContent(String lastestMsgContent) {
+        this.latestMsgContent = lastestMsgContent;
     }
 
     public int getUin() {

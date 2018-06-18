@@ -1,8 +1,13 @@
 package web.wechat.com.views;
 
 import com.alibaba.fastjson.JSON;
+import javafx.application.Platform;
+import javafx.beans.Observable;
+import javafx.beans.property.adapter.JavaBeanObjectProperty;
+import javafx.beans.property.adapter.JavaBeanObjectPropertyBuilder;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.ScheduledService;
 import javafx.concurrent.Task;
@@ -138,7 +143,7 @@ public class Webwxininit implements Initializable {
             for (int i = 0; i < ob.size(); i++) {
                 if (msg.getFromUserName().equals(ob.get(i).getUserName())) {
                     saveToHistoryFile(new Msg(msg.getContent(), msg.getFromUserName(), msg.getToUserName()), false);
-                    ob.get(i).setLastestMsgContent(WxinService.textCode(msg.getContent()));
+                    ob.get(i).latestMsgContent = (WxinService.textCode(msg.getContent()));
 
                     if (contactList.getSelectionModel().getSelectedItem() != null
                             && contactList.getSelectionModel().getSelectedItem().getUserName().equals(msg.getFromUserName())) {
@@ -147,7 +152,8 @@ public class Webwxininit implements Initializable {
                 } else if (msg.getFromUserName().equals(wxinService.baseRespInit.getUser().getUserName()) &&
                         msg.getToUserName().equals(ob.get(i).getUserName())) {
                     saveToHistoryFile(new Msg(msg.getContent(), msg.getFromUserName(), msg.getToUserName()), false);
-                    ob.get(i).setLastestMsgContent(WxinService.textCode(msg.getContent()));
+                    ob.get(i).setLatestMsgContent(msg.getContent());
+                    System.out.println(JSON.toJSONString(ob.get(i)));
                     if (contactList.getSelectionModel().getSelectedItem() != null
                             && "filehelper".equals(contactList.getSelectionModel().getSelectedItem().getUserName())) {
                         System.out.println("--->refresh");
@@ -158,10 +164,10 @@ public class Webwxininit implements Initializable {
         }
 
         System.out.println(JSON.toJSONString(ob));
-//        Platform.runLater(() -> {
-//            contactList.setItems(null);
-//            contactList.setItems(ob);
-//        });
+        Platform.runLater(() -> {
+            contactList.setItems(null);
+            contactList.setItems(ob);
+        });
     }
 
     public void initSelf(User user) {
@@ -174,7 +180,17 @@ public class Webwxininit implements Initializable {
 
     public void initChat(List<Member> member) {
         obMember = member;
-        ob = FXCollections.observableList(member);
+//        ob = FXCollections.observableList(member);
+        ob = FXCollections.observableList(member, m -> {
+            JavaBeanObjectProperty latestMsgContent = null;
+            try {
+                latestMsgContent = JavaBeanObjectPropertyBuilder.create().bean(m).name("latestMsgContent").build();
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            }
+            System.out.println("extractor");
+            return new Observable[]{latestMsgContent};
+        });
 
         contactList.setItems(ob);
         contactList.setCellFactory(lv -> new ListCell<Member>() {
@@ -223,7 +239,7 @@ public class Webwxininit implements Initializable {
                     nickname.setPrefHeight(32);
 
                     Label msg = new Label();
-                    msg.setText(item.getLastestMsgContent());
+                    msg.setText(item.getLatestMsgContent());
                     msg.setPrefHeight(32);
                     VBox info = new VBox(nickname, msg);
 
@@ -239,7 +255,6 @@ public class Webwxininit implements Initializable {
                 super.updateSelected(selected);
             }
         });
-
         contactList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         contactList.getSelectionModel().selectedItemProperty().addListener(
                 (ObservableValue<? extends Member> m, Member oldValue, Member newValue) -> {
@@ -302,7 +317,9 @@ public class Webwxininit implements Initializable {
         tempHb.setSpacing(10);
         tempHb.setAlignment(Pos.CENTER_LEFT);
         tempHb.setPadding(new Insets(10, 10, 10, 10));
-        tempMsgList.getChildren().add(tempHb);
+        Platform.runLater(() -> {
+            tempMsgList.getChildren().add(tempHb);
+        });
     }
 
     private void sendText(String str) {
