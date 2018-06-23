@@ -39,11 +39,8 @@ import java.util.*;
 public class WeChat implements Initializable {
 
     @FXML
-    private SplitPane mainInner;
+    private HBox mainInner;
     public static Log log = LogFactory.getLog(WeChat.class);
-
-    //    @FXML
-//    private Button first;
     private Map<String, String> map;
     @FXML
     private ImageView avatarIV;

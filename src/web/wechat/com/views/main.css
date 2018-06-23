@@ -137,14 +137,14 @@
 
 .scrollMsg {
     -fx-background-color: transparent;
-    -fx-border-width: 0;
+    -fx-border-width: 1px 0px 1px 0px;
+    -fx-border-color: #dddddd;
 }
 
 .topContactName {
     -fx-background-color: transparent;
     -fx-padding: 0 15 0 15;
-    -fx-border-width: 0 0 1 0;
-    -fx-border-color: #c3c3c3;
+    -fx-border-width: 0;
 }
 
 .msgContent {

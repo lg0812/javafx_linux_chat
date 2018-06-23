@@ -5,11 +5,9 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -18,128 +16,129 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<SplitPane fx:id="mainInner" dividerPositions="0.28" prefHeight="720" prefWidth="1000" style="-fx-background-color: #2e3238;" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="web.wechat.com.views.WeChat">
-    <items>
-        <AnchorPane>
+<HBox fx:id="mainInner" prefHeight="720.0" prefWidth="1000.0" style="-fx-background-color: #2e3238;" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="web.wechat.com.views.WeChat">
+    <children>
+        <GridPane alignment="CENTER" prefWidth="280">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints prefHeight="80.0" vgrow="NEVER" />
+                <RowConstraints prefHeight="32.0" vgrow="NEVER" />
+                <RowConstraints prefHeight="40.0" vgrow="NEVER" />
+                <RowConstraints prefHeight="568.0" vgrow="ALWAYS" />
+            </rowConstraints>
             <children>
-                <GridPane alignment="CENTER">
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints minHeight="80.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="32.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="40.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="568.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
+                <Label fx:id="nickName" text="" textFill="WHITE" GridPane.columnIndex="1" />
+                <HBox alignment="CENTER" style="-fx-padding: 10;">
                     <children>
-                        <Label fx:id="nickName" text="" textFill="WHITE" GridPane.columnIndex="1" />
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-padding: 10;">
-                            <children>
-                                <ImageView fx:id="avatarIV" fitHeight="40" fitWidth="40" pickOnBounds="true" preserveRatio="true" styleClass="avatar" />
-                            </children>
-                            <opaqueInsets>
-                                <Insets />
-                            </opaqueInsets>
-                        </HBox>
-
-                        <HBox alignment="CENTER" GridPane.columnIndex="0" GridPane.columnSpan="3" GridPane.rowIndex="1">
-                            <TextField alignment="TOP_LEFT" prefHeight="23.0" prefWidth="240.0" promptText="search" style="-fx-border-width: 0;-fx-background-color: #26292e;">
-                                <opaqueInsets>
-                                    <Insets />
-                                </opaqueInsets>
-                            </TextField>
-                        </HBox>
-                        <HBox alignment="CENTER" onMouseClicked="#toChat" prefHeight="40.0" GridPane.rowIndex="2">
-                            <children>
-                                <Pane pickOnBounds="true" prefHeight="35.0" prefWidth="35.0" styleClass="chatIcon" />
-                            </children>
-                        </HBox>
-                        <HBox alignment="CENTER" onMouseClicked="#toRead" prefHeight="40.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                            <children>
-                                <!--<Label text="阅读"/>-->
-                                <Pane pickOnBounds="true" prefHeight="35.0" prefWidth="35.0" styleClass="readIcon" />
-                            </children>
-                        </HBox>
-                        <HBox alignment="CENTER" onMouseClicked="#toContact" prefHeight="40.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
-                            <children>
-                                <!--<Label text="通讯录"/>-->
-                                <Pane pickOnBounds="true" prefHeight="35.0" prefWidth="35.0" styleClass="contactIcon" />
-                            </children>
-                        </HBox>
-
-                        <ListView fx:id="contactList" prefHeight="568.0" style="-fx-background-color: transparent;" GridPane.columnIndex="0" GridPane.columnSpan="3" GridPane.rowIndex="3" />
-                        <Button fx:id="dropMenu" mnemonicParsing="menu" onAction="#showData" prefHeight="30" prefWidth="30" styleClass="dropDownIcon" text="ddd" GridPane.columnIndex="2" />
+                        <ImageView fx:id="avatarIV" fitHeight="40" fitWidth="40" pickOnBounds="true" preserveRatio="true" styleClass="avatar" />
                     </children>
+                    <opaqueInsets>
+                        <Insets />
+                    </opaqueInsets>
+                </HBox>
 
-                </GridPane>
+                <HBox alignment="CENTER" GridPane.columnIndex="0" GridPane.columnSpan="3" GridPane.rowIndex="1">
+                    <TextField alignment="TOP_LEFT" prefHeight="23.0" prefWidth="240.0" promptText="search" style="-fx-border-width: 0;-fx-background-color: #26292e;">
+                        <opaqueInsets>
+                            <Insets />
+                        </opaqueInsets>
+                    </TextField>
+                </HBox>
+                <HBox alignment="CENTER" onMouseClicked="#toChat" prefHeight="40.0" GridPane.rowIndex="2">
+                    <children>
+                        <Pane pickOnBounds="true" prefHeight="35.0" prefWidth="35.0" styleClass="chatIcon" />
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER" onMouseClicked="#toRead" prefHeight="40.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                    <children>
+                        <!--<Label text="阅读"/>-->
+                        <Pane pickOnBounds="true" prefHeight="35.0" prefWidth="35.0" styleClass="readIcon" />
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER" onMouseClicked="#toContact" prefHeight="40.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                    <children>
+                        <!--<Label text="通讯录"/>-->
+                        <Pane pickOnBounds="true" prefHeight="35.0" prefWidth="35.0" styleClass="contactIcon" />
+                    </children>
+                </HBox>
 
-
+                <ListView fx:id="contactList" maxWidth="280" prefHeight="560" style="-fx-background-color: transparent;" GridPane.columnIndex="0" GridPane.columnSpan="3" GridPane.rowIndex="3" />
+                <Button fx:id="dropMenu" mnemonicParsing="menu" onAction="#showData" prefHeight="30" prefWidth="30" styleClass="dropDownIcon" text="ddd" GridPane.columnIndex="2" />
             </children>
-        </AnchorPane>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color:#f2f2f2;">
-            <children>
-                <BorderPane prefHeight="740.0" prefWidth="690.0">
-                    <top>
-                        <HBox alignment="CENTER" styleClass="topContactName" prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+
+        </GridPane>
+        <BorderPane prefHeight="720.0" prefWidth="720" style="-fx-background-color: #f2f2f2;">
+            <top>
+                <HBox alignment="CENTER" prefHeight="50.0" styleClass="topContactName" BorderPane.alignment="CENTER">
+                    <children>
+                        <Label fx:id="contactName" text="Label" />
+                    </children>
+                    <BorderPane.margin>
+                        <Insets left="15.0" right="15.0" />
+                    </BorderPane.margin>
+                </HBox>
+            </top>
+            <center>
+                <ScrollPane fx:id="scrollMsg" focusTraversable="false" pannable="true" styleClass="scrollMsg" BorderPane.alignment="CENTER">
+                    <content>
+                        <VBox fx:id="tempMsgList" alignment="BOTTOM_CENTER" fillWidth="true" style="-fx-fill-width: true;">
                             <children>
-                                <Label fx:id="contactName" text="Label" />
+                            </children>
+                        </VBox>
+                    </content>
+               <padding>
+                  <Insets left="15.0" right="15.0" />
+               </padding>
+                </ScrollPane>
+            </center>
+            <bottom>
+                <BorderPane prefHeight="180.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                    <top>
+                        <HBox alignment="CENTER_LEFT" prefHeight="40.0" BorderPane.alignment="CENTER">
+                            <children>
+                                <Button prefHeight="30.0" prefWidth="30.0" styleClass="expressions">
+                                    <HBox.margin>
+                                        <Insets left="15.0" />
+                                    </HBox.margin>
+                                </Button>
+                                <Button prefHeight="30.0" prefWidth="30.0" styleClass="cuts">
+                                    <HBox.margin>
+                                        <Insets left="10.0" />
+                                    </HBox.margin>
+                                </Button>
+                                <Button prefHeight="30.0" prefWidth="30.0" styleClass="files" text="file">
+                                    <HBox.margin>
+                                        <Insets left="10.0" />
+                                    </HBox.margin>
+                                </Button>
                             </children>
                         </HBox>
                     </top>
                     <center>
-                        <ScrollPane fx:id="scrollMsg" styleClass="scrollMsg" focusTraversable="false" pannable="true" prefHeight="510.0" prefWidth="578.0" BorderPane.alignment="CENTER">
-                            <content>
-                                <VBox fx:id="tempMsgList" alignment="BOTTOM_CENTER" fillWidth="true" prefHeight="100.0" prefWidth="690.0" style="-fx-fill-width: true;">
-                                    <children>
-                                    </children>
-                                </VBox>
-                            </content>
-                        </ScrollPane>
+                        <TextArea fx:id="msgContent" focusTraversable="false" prefHeight="84.0" prefWidth="200.0" styleClass="msgContent" BorderPane.alignment="CENTER">
+                     <BorderPane.margin>
+                        <Insets left="15.0" right="15.0" />
+                     </BorderPane.margin></TextArea>
                     </center>
                     <bottom>
-                        <BorderPane prefHeight="180.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                            <top>
-                                <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="690.0" BorderPane.alignment="CENTER">
-                                    <children>
-                                        <Button prefHeight="30.0" prefWidth="30.0" styleClass="expressions">
-                                            <HBox.margin>
-                                                <Insets left="10.0" />
-                                            </HBox.margin>
-                                        </Button>
-                                        <Button prefHeight="30.0" prefWidth="30.0" styleClass="cuts">
-                                            <HBox.margin>
-                                                <Insets left="10.0" />
-                                            </HBox.margin>
-                                        </Button>
-                                        <Button prefHeight="30.0" prefWidth="30.0" styleClass="files" text="file">
-                                            <HBox.margin>
-                                                <Insets left="10.0" />
-                                            </HBox.margin>
-                                        </Button>
-                                    </children>
-                                </HBox>
-                            </top>
-                            <center>
-                                <TextArea fx:id="msgContent" id="msgContent" focusTraversable="false" prefHeight="84.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-                            </center>
-                            <bottom>
-                                <HBox alignment="TOP_RIGHT" prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="TOP_RIGHT">
-                                    <children>
-                                        <Button alignment="TOP_RIGHT" mnemonicParsing="false" onAction="#sendMsg" styleClass="sendBtn" text="send" style="-fx-text-fill: #000000" />
-                                    </children>
-                                    <padding>
-                                        <Insets right="10.0" top="10.0" />
-                                    </padding>
-                                </HBox>
-                            </bottom>
-                        </BorderPane>
+                        <HBox alignment="TOP_RIGHT" prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="TOP_RIGHT">
+                            <children>
+                                <Button alignment="TOP_RIGHT" mnemonicParsing="false" onAction="#sendMsg" style="-fx-text-fill: #000000" styleClass="sendBtn" text="send">
+                           <HBox.margin>
+                              <Insets right="15.0" />
+                           </HBox.margin></Button>
+                            </children>
+                            <padding>
+                                <Insets top="10.0" />
+                            </padding>
+                        </HBox>
                     </bottom>
                 </BorderPane>
-            </children>
-        </AnchorPane>
-
-    </items>
-</SplitPane>
+            </bottom>
+        </BorderPane>
+    </children>
+</HBox>
