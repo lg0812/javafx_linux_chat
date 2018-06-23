@@ -138,7 +138,6 @@ public class WeChat implements Initializable {
 
     public void checkMsg() {
         BaseResp baseResp = wxinService.webwxsync();
-        log.info("----->" + baseResp.getAddMsgList()[0].getContent());
         for (AddMsg msg : baseResp.getAddMsgList()) {
             for (Integer i = new Integer(0); i < ob.size(); i++) {
                 if (msg.getFromUserName().equals(ob.get(i).getUserName())) {
