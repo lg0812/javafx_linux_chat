@@ -3,11 +3,8 @@ package web.wechat.com.views;
 import com.alibaba.fastjson.JSON;
 import javafx.application.Platform;
 import javafx.beans.Observable;
-import javafx.beans.property.adapter.JavaBeanObjectProperty;
-import javafx.beans.property.adapter.JavaBeanObjectPropertyBuilder;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.ScheduledService;
 import javafx.concurrent.Task;
@@ -22,6 +19,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
+import javafx.util.Callback;
 import javafx.util.Duration;
 import org.apache.commons.io.input.ReversedLinesFileReader;
 import org.apache.commons.logging.Log;
@@ -53,7 +53,7 @@ public class Webwxininit implements Initializable {
     private Label nickName;
     private WxinService wxinService = new WxinService();
     @FXML
-    private ListView<Member> contactList;
+    private ListView<ObservableMember> contactList;
     @FXML
     private Label contactName;
     @FXML
@@ -107,7 +107,9 @@ public class Webwxininit implements Initializable {
                     protected Object call() throws Exception {
                         Map<String, String> map = wxinService.synccheck();
                         if (!"0".equals(map.get("selector"))) {
-                            checkMsg();
+                            Platform.runLater(() -> {
+                                checkMsg();
+                            });
                         } else if ("1101".equals(map.get("retcode"))) {
                             Thread.sleep(1);
                         } else {
@@ -140,13 +142,12 @@ public class Webwxininit implements Initializable {
         BaseResp baseResp = wxinService.webwxsync();
         log.info("----->" + baseResp.getAddMsgList()[0].getContent());
         for (AddMsg msg : baseResp.getAddMsgList()) {
-            for (int i = 0; i < ob.size(); i++) {
+            for (Integer i = new Integer(0); i < ob.size(); i++) {
                 if (msg.getFromUserName().equals(ob.get(i).getUserName())) {
                     saveToHistoryFile(new Msg(msg.getContent(), msg.getFromUserName(), msg.getToUserName()), false);
-                    ob.get(i).latestMsgContent = (WxinService.textCode(msg.getContent()));
-
+                    ob.get(i).setLatestMsgContent(WxinService.textCode(msg.getContent()));
                     if (contactList.getSelectionModel().getSelectedItem() != null
-                            && contactList.getSelectionModel().getSelectedItem().getUserName().equals(msg.getFromUserName())) {
+                            && contactList.getSelectionModel().getSelectedItem().userName.get().equals(msg.getFromUserName())) {
                         receiveText(msg.getContent());
                     }
                 } else if (msg.getFromUserName().equals(wxinService.baseRespInit.getUser().getUserName()) &&
@@ -155,7 +156,7 @@ public class Webwxininit implements Initializable {
                     ob.get(i).setLatestMsgContent(msg.getContent());
                     System.out.println(JSON.toJSONString(ob.get(i)));
                     if (contactList.getSelectionModel().getSelectedItem() != null
-                            && "filehelper".equals(contactList.getSelectionModel().getSelectedItem().getUserName())) {
+                            && "filehelper".equals(contactList.getSelectionModel().getSelectedItem().userName.get())) {
                         System.out.println("--->refresh");
                         receiveText(msg.getContent());
                     }
@@ -163,11 +164,11 @@ public class Webwxininit implements Initializable {
             }
         }
 
-        System.out.println(JSON.toJSONString(ob));
-        Platform.runLater(() -> {
-            contactList.setItems(null);
-            contactList.setItems(ob);
-        });
+//        System.out.println(JSON.toJSONString(ob));
+//        Platform.runLater(() -> {
+//            contactList.setItems(null);
+//            contactList.setItems(ob);
+//        });
     }
 
     public void initSelf(User user) {
@@ -175,46 +176,43 @@ public class Webwxininit implements Initializable {
         avatarIV.setImage(new Image(wxinService.webwxgeticon(user.getHeadImgUrl())));
     }
 
-    ObservableList<Member> ob = null;
+    ObservableList<ObservableMember> ob = null;
     List<Member> obMember = null;
 
     public void initChat(List<Member> member) {
         obMember = member;
 //        ob = FXCollections.observableList(member);
-        ob = FXCollections.observableList(member, m -> {
-            JavaBeanObjectProperty latestMsgContent = null;
-            try {
-                latestMsgContent = JavaBeanObjectPropertyBuilder.create().bean(m).name("latestMsgContent").build();
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            }
-            System.out.println("extractor");
-            return new Observable[]{latestMsgContent};
-        });
+        ob = FXCollections.observableArrayList(param -> new Observable[]{
+                        param.headImgUrl,
+                        param.nickName,
+                        param.latestMsgContent
+                }
+        );
 
+
+        for (Member m : member) {
+            ob.add(new ObservableMember(m));
+        }
         contactList.setItems(ob);
-        contactList.setCellFactory(lv -> new ListCell<Member>() {
+        contactList.setCellFactory(lv -> new ListCell<ObservableMember>() {
 
             @Override
-            protected void updateItem(Member item, boolean empty) {
+            protected void updateItem(ObservableMember item, boolean empty) {
                 super.updateItem(item, empty);
                 if (item != null) {
                     GridPane gp = new GridPane();
-                    gp.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
                     ColumnConstraints c1 = new ColumnConstraints(64);
                     ColumnConstraints c2 = new ColumnConstraints(216);
                     gp.getColumnConstraints().addAll(c1, c2);
                     gp.setPrefSize(280, 64);
                     ImageView head = new ImageView();
                     head.setImage(new Image("sources/temp.png", true));
-
                     Task task = new Task() {
                         @Override
                         protected Object call() throws Exception {
                             head.setImage(new Image(wxinService.webwxgeticon(item.getHeadImgUrl())));
                             return null;
                         }
-
                     };
                     new Thread(task).start();
                     head.setFitWidth(40);
@@ -224,6 +222,8 @@ public class Webwxininit implements Initializable {
                     headHbox.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
                     Label count = new Label();
                     count.setText("10");
+                    count.setFont(new Font(12));
+                    count.setPrefHeight(14);
                     count.setTextFill(Color.ORANGERED);
                     count.setLayoutX(48);
                     count.setLayoutY(8);
@@ -233,12 +233,13 @@ public class Webwxininit implements Initializable {
                     gp.add(headHbox, 0, 0);
                     gp.add(pane, 0, 0);
 
-
                     Label nickname = new Label();
+                    nickname.setTextFill(Color.web("#ffffff"));
                     nickname.setText(wxinService.textCode(item.getNickName()));
                     nickname.setPrefHeight(32);
 
                     Label msg = new Label();
+                    msg.setTextFill(Color.web("#ffffff"));
                     msg.setText(item.getLatestMsgContent());
                     msg.setPrefHeight(32);
                     VBox info = new VBox(nickname, msg);
@@ -257,17 +258,17 @@ public class Webwxininit implements Initializable {
         });
         contactList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         contactList.getSelectionModel().selectedItemProperty().addListener(
-                (ObservableValue<? extends Member> m, Member oldValue, Member newValue) -> {
-                    contactName.setText(WxinService.textCode(newValue.getNickName()));
+                (ObservableValue<? extends ObservableMember> m, ObservableMember oldValue, ObservableMember newValue) -> {
+                    contactName.setText(WxinService.textCode(newValue.nickName.get()));
                     curMember = newValue;
                     tempMsgList.getChildren().removeAll(tempMsgList.getChildren());
-                    showHistoryMsgs(readLastSeveralLines(newValue.getUserName(), 20));
+                    showHistoryMsgs(readLastSeveralLines(newValue.userName.get(), 20));
                 });
 
         contactList.setPrefSize(200, 200);
     }
 
-    private Member curMember;
+    private ObservableMember curMember;
 
 
     public void showHistoryMsgs(Stack<Msg> latest) {
