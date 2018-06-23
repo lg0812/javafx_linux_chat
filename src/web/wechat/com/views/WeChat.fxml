@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<SplitPane fx:id="mainInner" dividerPositions="0.28" prefHeight="720" prefWidth="1000" style="-fx-background-color: #2e3238;" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="web.wechat.com.views.Webwxininit">
+<SplitPane fx:id="mainInner" dividerPositions="0.28" prefHeight="720" prefWidth="1000" style="-fx-background-color: #2e3238;" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="web.wechat.com.views.WeChat">
     <items>
         <AnchorPane>
             <children>

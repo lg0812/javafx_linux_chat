@@ -19,9 +19,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
-import javafx.util.Callback;
 import javafx.util.Duration;
 import org.apache.commons.io.input.ReversedLinesFileReader;
 import org.apache.commons.logging.Log;
@@ -38,11 +36,11 @@ import java.net.URL;
 import java.util.*;
 
 
-public class Webwxininit implements Initializable {
+public class WeChat implements Initializable {
 
     @FXML
     private SplitPane mainInner;
-    public static Log log = LogFactory.getLog(Webwxininit.class);
+    public static Log log = LogFactory.getLog(WeChat.class);
 
     //    @FXML
 //    private Button first;

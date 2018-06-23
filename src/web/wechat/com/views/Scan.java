@@ -79,14 +79,14 @@ public class Scan implements Initializable {
                 Platform.runLater(() -> {
                     try {
                         Stage stage = (Stage) root.getScene().getWindow();
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("webwxininit.fxml"));
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("WeChat.fxml"));
                         Scene scene = new Scene((Region) loader.load());
                         scene.getStylesheets().add(Scan.class.getResource("main.css").toExternalForm());
                         stage.setTitle("wechat");
                         stage.setScene(scene);
                         stage.setResizable(true);
-                        Webwxininit webwxininit = loader.<Webwxininit>getController();
-                        webwxininit.startTask(map);
+                        WeChat weChat = loader.<WeChat>getController();
+                        weChat.startTask(map);
                         stage.show();
 //                        root.getScene().getWindow().hide();
                     } catch (IOException e) {
