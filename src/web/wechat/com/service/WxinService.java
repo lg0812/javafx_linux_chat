@@ -298,7 +298,7 @@ public class WxinService {
         System.out.println("e" + ("" + String.format("%.15f", Math.random()).substring(2, 17)));
     }
 
-    //    @Test
+    // @Test
     public static String textCode(String str) {
         //String str = "Linuxçˆ±å¥½è€…";
         //str = "Linuxç\u0088±å¥½è\u0080\u0085";
