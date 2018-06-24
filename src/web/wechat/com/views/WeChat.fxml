@@ -85,14 +85,14 @@
             <center>
                 <ScrollPane fx:id="scrollMsg" focusTraversable="false" pannable="true" styleClass="scrollMsg" BorderPane.alignment="CENTER">
                     <content>
-                        <VBox fx:id="tempMsgList" alignment="BOTTOM_CENTER" fillWidth="true" style="-fx-fill-width: true;">
+                        <VBox fx:id="tempMsgList" alignment="BOTTOM_CENTER">
                             <children>
                             </children>
                         </VBox>
                     </content>
-               <padding>
-                  <Insets left="15.0" right="15.0" />
-               </padding>
+                    <padding>
+                        <Insets left="15.0" right="15.0" />
+                    </padding>
                 </ScrollPane>
             </center>
             <bottom>
@@ -120,17 +120,19 @@
                     </top>
                     <center>
                         <TextArea fx:id="msgContent" focusTraversable="false" prefHeight="84.0" prefWidth="200.0" styleClass="msgContent" BorderPane.alignment="CENTER">
-                     <BorderPane.margin>
-                        <Insets left="15.0" right="15.0" />
-                     </BorderPane.margin></TextArea>
+                            <BorderPane.margin>
+                                <Insets left="15.0" right="15.0" />
+                            </BorderPane.margin>
+                        </TextArea>
                     </center>
                     <bottom>
                         <HBox alignment="TOP_RIGHT" prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="TOP_RIGHT">
                             <children>
                                 <Button alignment="TOP_RIGHT" mnemonicParsing="false" onAction="#sendMsg" style="-fx-text-fill: #000000" styleClass="sendBtn" text="send">
-                           <HBox.margin>
-                              <Insets right="15.0" />
-                           </HBox.margin></Button>
+                                    <HBox.margin>
+                                        <Insets right="15.0" />
+                                    </HBox.margin>
+                                </Button>
                             </children>
                             <padding>
                                 <Insets top="10.0" />
