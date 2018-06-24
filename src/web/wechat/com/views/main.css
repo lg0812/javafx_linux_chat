@@ -142,6 +142,11 @@
     -fx-fit-to-width: true;
 }
 
+.scrollMsg .scroll-bar:vertical {
+    -fx-pref-width: 0;
+    -fx-padding: 0;
+}
+
 .topContactName {
     -fx-background-color: transparent;
     -fx-padding: 0 15 0 15;

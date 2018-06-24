@@ -135,7 +135,7 @@ public class WeChat implements Initializable {
     public void checkMsg() {
         BaseResp baseResp = wxinService.webwxsync();
         for (AddMsg msg : baseResp.getAddMsgList()) {
-            for (Integer i = new Integer(0); i < ob.size(); i++) {
+            for (Integer i = new Integer(0); i < ob.size() && !"".equals(msg.getContent()); i++) {
                 if (msg.getFromUserName().equals(ob.get(i).getUserName())) {
                     saveToHistoryFile(new Msg(msg.getContent(), msg.getFromUserName(), msg.getToUserName()), false);
                     ob.get(i).setLatestMsgContent(WxinService.textCode(msg.getContent()));
