@@ -83,7 +83,6 @@ public class WeChat implements Initializable {
             protected void succeeded() {
                 super.succeeded();
                 initSelf(wxinService.baseRespInit.getUser());
-                //   initChat(Arrays.asList(wxinService.baseRespInit.getContactList()).addAll(batchContact.getContactList()));
                 toChat(null);
                 syncCheckAndGet();
             }
@@ -158,11 +157,6 @@ public class WeChat implements Initializable {
             }
         }
 
-//        System.out.println(JSON.toJSONString(ob));
-//        Platform.runLater(() -> {
-//            contactList.setItems(null);
-//            contactList.setItems(ob);
-//        });
     }
 
     public void initSelf(User user) {
@@ -175,7 +169,6 @@ public class WeChat implements Initializable {
 
     public void initChat(List<Member> member) {
         obMember = member;
-//        ob = FXCollections.observableList(member);
         ob = FXCollections.observableArrayList(param -> new Observable[]{
                         param.headImgUrl,
                         param.nickName,
@@ -300,7 +293,6 @@ public class WeChat implements Initializable {
         Pane p = new Pane();
         p.setPrefSize(40, 40);
         p.setBackground(new Background(new BackgroundImage(
-                //new Image(wxinService.webwxgeticon(wxinService.baseRespInit.getUser().getHeadImgUrl())),
                 new Image("sources/temp.png", true),
                 BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT,
@@ -325,7 +317,6 @@ public class WeChat implements Initializable {
         Pane p = new Pane();
         p.setPrefSize(40, 40);
         p.setBackground(new Background(new BackgroundImage(
-                //new Image(wxinService.webwxgeticon(wxinService.baseRespInit.getUser().getHeadImgUrl())),
                 new Image("sources/temp.png", true),
                 BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT,
@@ -344,7 +335,6 @@ public class WeChat implements Initializable {
         String str = msgContent.getText();
         if (!"".equals(str)) {
             sendText(str);
-            // receiveText(str + "recreceiverecrecreceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceiveeiverecreceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceiveeiverecreceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceiveeiverecreceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceiveeiveeivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceivereceiveeive");
             msgContent.setText("");
             String currentTimeStr = System.currentTimeMillis() + (String.format("%.3f", Math.random()));
             msg = new Msg(currentTimeStr,
@@ -404,7 +394,6 @@ public class WeChat implements Initializable {
 
     @Test
     public void tR() {
-//        System.out.println(System.getProperty("user.dir"));
         readLastSeveralLines("@adaab8e5b746125a256c61dfb6ca24463ba7f48ff56c064968a88fd20765ab50", 5);
     }
 }
