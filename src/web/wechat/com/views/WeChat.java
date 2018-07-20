@@ -146,13 +146,15 @@ public class WeChat implements Initializable {
                 } else if (msg.getFromUserName().equals(wxinService.baseRespInit.getUser().getUserName()) &&
                         msg.getToUserName().equals(ob.get(i).getUserName())) {
                     saveToHistoryFile(new Msg(msg.getContent(), msg.getFromUserName(), msg.getToUserName()), false);
-                    ob.get(i).setLatestMsgContent(msg.getContent());
+                    ob.get(i).setLatestMsgContent(WxinService.textCode(msg.getContent()));
                     System.out.println(JSON.toJSONString(ob.get(i)));
                     if (contactList.getSelectionModel().getSelectedItem() != null
                             && "filehelper".equals(contactList.getSelectionModel().getSelectedItem().userName.get())) {
                         System.out.println("--->refresh");
                         receiveText(msg.getContent());
                     }
+                } else {
+
                 }
             }
         }
@@ -165,10 +167,10 @@ public class WeChat implements Initializable {
     }
 
     ObservableList<ObservableMember> ob = null;
-    List<Member> obMember = null;
+    Set<Member> obMember = null;
 
     public void initChat(List<Member> member) {
-        obMember = member;
+        obMember = new HashSet<>(member);
         ob = FXCollections.observableArrayList(param -> new Observable[]{
                         param.headImgUrl,
                         param.nickName,
@@ -177,7 +179,7 @@ public class WeChat implements Initializable {
         );
 
 
-        for (Member m : member) {
+        for (Member m : obMember) {
             ob.add(new ObservableMember(m));
         }
         contactList.setItems(ob);
@@ -286,7 +288,7 @@ public class WeChat implements Initializable {
 
     public void receiveText(String str) {
 
-        Label tempMsg = new Label(str);
+        Label tempMsg = new Label(WxinService.textCode(str));
         tempMsg.setWrapText(true);
         tempMsg.setMaxWidth(500);
         tempMsg.setStyle(" -fx-border-width: 1; -fx-border-color: #dddddd; -fx-border-radius: 3; -fx-padding: 10px 15px;");
